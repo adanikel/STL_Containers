@@ -1,5 +1,8 @@
 #include <iostream>
 
+// an implementation of vector using dynamic memory
+
+
 template <typename T>
 class Vec
 {
@@ -10,8 +13,8 @@ public:
 	unsigned int sz; // size of array
 	T* elem{ nullptr }; // will be the array, initialized as null pointer
 
-	Vec(unsigned int inp1);
-	Vec(std::initializer_list<T> lst);
+	explicit Vec(unsigned int inp1);
+	explicit Vec(std::initializer_list<T> lst); // to user 'Vec{a, b, c}'
 	Vec(Vec& src_vec);
 	Vec(Vec&& rvalue_vec) noexcept;
 
@@ -26,7 +29,7 @@ public:
 	iterator insert(iterator plc, const T& obj); // insert new objects
 	iterator erase(iterator plc); // erase existing objects
 
-	void set(int pos, T obj);
+	void set(const unsigned int pos, T obj);
 	T get(int pos);
 	void push_back(T obj);
 	unsigned int getsize() const { return sz; };
@@ -41,7 +44,7 @@ public:
 };
 
 
-Vec<int> int_vec(int inp) // to test move constructor
+Vec<int> int_vec(unsigned int inp) // to test move constructor
 {
 	Vec<int> temp(inp);
 	std::cout << std::endl << "initialized vector! elem location:" << temp.elem;
@@ -210,7 +213,7 @@ T& Vec<T>::at(const int pos)
 }
 
 template <typename T>
-void Vec<T>::set(const int pos, const T obj)
+void Vec<T>::set(const unsigned int pos, const T obj)
 {
 	if (!(this->sz + 1 < this->space)) this->reserve(sz * 2);
 
