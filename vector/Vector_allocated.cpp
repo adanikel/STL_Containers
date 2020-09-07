@@ -1,7 +1,4 @@
 #include <iostream>
-#include <sstream>
-#include <map>
-
 
 template <typename T>
 class Vec
@@ -24,8 +21,8 @@ public:
 	T operator[] (const int index) const; // redefining [] operator for constant!! does not return a reference!!
 
 	using iterator = T*;
-	iterator begin() { return &(elem[0]); }
-	iterator end() { return &elem[sz - 1]; }
+	iterator begin() { return &(elem[0]); } // pointer to first element
+	iterator end() { return &elem[sz - 1]; } // pointer to last element
 	iterator insert(iterator plc, const T& obj); // insert new objects
 	iterator erase(iterator plc); // erase existing objects
 
