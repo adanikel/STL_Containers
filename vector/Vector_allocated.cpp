@@ -4,13 +4,13 @@ template <typename T>
 class Vec
 {
 private:
-	size_t space;
+	unsigned int space;
 
 public:
-	size_t sz; // size of array
+	unsigned int sz; // size of array
 	T* elem{ nullptr }; // will be the array, initialized as null pointer
 
-	Vec(size_t inp1);
+	Vec(unsigned int inp1);
 	Vec(std::initializer_list<T> lst);
 	Vec(Vec& src_vec);
 	Vec(Vec&& rvalue_vec) noexcept;
@@ -29,12 +29,12 @@ public:
 	void set(int pos, T obj);
 	T get(int pos);
 	void push_back(T obj);
-	size_t getsize() const { return sz; };
-	size_t get_elemsize() const { return sizeof(T); };
-	void resize(size_t new_sz);
+	unsigned int getsize() const { return sz; };
+	unsigned int get_elemsize() const { return sizeof(T); };
+	void resize(unsigned int new_sz);
 	inline bool empty() { return (sz == 0); };
-	iterator reserve(size_t new_space);
-	inline size_t capacity() { return space; };
+	iterator reserve(unsigned int new_space);
+	inline unsigned int capacity() { return space; };
 	T& at(const int pos); // checks for out of range error unlike [] operators
 
 	~Vec(); // destructor is a must since we are initializing an array on the heap
@@ -71,13 +71,13 @@ int main()
 	std::cout << "will insert soon" << std::endl;
 	std::cout << "old size is " << var.getsize() << std::endl;
 
-	for (size_t idx = 0; idx != var.sz; idx++)
+	for (unsigned int idx = 0; idx != var.sz; idx++)
 	{
 		std::cout << var[idx] << std::endl;
 	};
 	var.insert(itr + 1, 0123);
 	std::cout << "inserted!!" << std::endl;
-	for (size_t idx = 0; idx != var.sz; idx++)
+	for (unsigned int idx = 0; idx != var.sz; idx++)
 	{
 		std::cout << var[idx] << std::endl;
 	};
@@ -89,7 +89,7 @@ int main()
 
 
 template <typename T>
-Vec<T>::Vec(const size_t inp1)
+Vec<T>::Vec(const unsigned int inp1)
 	:sz{ inp1 }, space{ inp1 * 2 }, elem{ new T[space] }
 {}
 
@@ -142,7 +142,7 @@ typename Vec<T>::iterator Vec<T>::erase(Vec<T>::iterator plc)
 template <typename T>
 typename Vec<T>::iterator Vec<T>::insert(Vec<T>::iterator plc, const T& obj)
 {
-	size_t loc = plc - this->begin(); // might be invalidated if 'reserve' is called, and therefore I save the location
+	unsigned int loc = plc - this->begin(); // might be invalidated if 'reserve' is called, and therefore I save the location
 	if (!(this->sz + 1 < this->space)) this->reserve(sz * 2);
 	plc = this->begin() + loc;
 
@@ -168,7 +168,7 @@ Vec<T>& Vec<T>::operator= (Vec<T>& obj) // copy
 	this->sz = obj.sz;
 	elem = new T[this->sz];
 
-	for (size_t index = 0; index != obj.sz; index++)
+	for (unsigned int index = 0; index != obj.sz; index++)
 	{
 		this->elem[index] = obj[index];
 	}
@@ -237,14 +237,14 @@ void Vec<T>::push_back(const T obj)
 }
 
 template <typename T>
-void Vec<T>::resize(size_t new_sz)
+void Vec<T>::resize(unsigned int new_sz)
 {
-	size_t diff = this->sz - new_sz;
+	unsigned int diff = this->sz - new_sz;
 
 	if (new_sz <= this->sz) // delete excess
 	{
 
-		for (size_t idx = new_sz; idx != this->sz; idx++)
+		for (unsigned int idx = new_sz; idx != this->sz; idx++)
 		{
 			this->elem[idx] = 0;
 
@@ -253,7 +253,7 @@ void Vec<T>::resize(size_t new_sz)
 	}
 	else if (new_sz > this->sz) // push_back new ones and update size
 	{
-		for (size_t idx = this->sz; idx != new_sz; idx++)
+		for (unsigned int idx = this->sz; idx != new_sz; idx++)
 		{
 			this->push_back(0);
 		}
@@ -263,7 +263,7 @@ void Vec<T>::resize(size_t new_sz)
 }
 
 template <typename T>
-typename Vec<T>::iterator Vec<T>::reserve(size_t new_space)
+typename Vec<T>::iterator Vec<T>::reserve(unsigned int new_space)
 {
 	T* temp = new T[new_space];
 	std::copy(elem, elem + sz, temp);
