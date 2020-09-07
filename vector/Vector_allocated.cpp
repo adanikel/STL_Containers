@@ -2,6 +2,10 @@
 
 // an implementation of vector using dynamic memory
 
+// todo: 
+// 1. organize the class
+// 2. export main() outside
+
 
 template <typename T>
 class Vec
