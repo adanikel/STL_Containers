@@ -1,6 +1,8 @@
 #include <iostream>
 #include <list>
 
+// todo: if exists, overwrite
+
 template <typename T, typename R>
 class UnorderedMapIMP
 {
@@ -17,7 +19,7 @@ public:
 	void insert_element(const T key, const R value);
 	void delete_element(T key);
 
-	void at(T key);  // todo: return ref R
+	R& at(T key);
 	//R& operator[](T key);
 
 
@@ -29,11 +31,13 @@ public:
 int main()
 {
 	std::string some_key{ "wassup hombre" };
+	std::string non_existing_key{ "wassup hombre2" };
 	UnorderedMapIMP<std::string, int> string_map(5);
 
 	string_map.insert_element(some_key, 10);
 
-	string_map.at(some_key);
+	std::cout << string_map.at(some_key);
+	std::cout << string_map.at(non_existing_key);
 
 	return 0;
 }
@@ -61,10 +65,13 @@ R* UnorderedMapIMP<T, R>::search_within_specific_list(unsigned int list_idx, T k
 	R* value = nullptr;
 	typename std::list<std::pair<T, R>>::iterator itr = this->element_lists[list_idx].begin();
 
-
 	while (itr != this->element_lists[list_idx].end())
 	{
-		if (itr->first == key) value = &(itr->second);
+		if (itr->first == key)
+		{
+			value = &(itr->second);
+			break;
+		}
 		itr++;
 	}
 
@@ -72,15 +79,20 @@ R* UnorderedMapIMP<T, R>::search_within_specific_list(unsigned int list_idx, T k
 }
 
 template <typename T, typename R>
-void UnorderedMapIMP<T, R>::at(T key)
+R& UnorderedMapIMP<T, R>::at(T key)
 {
 	unsigned int hashed = this->get_hashed_value(key);
 	unsigned int list_idx = this->get_hashed_key(hashed);
 
 	R* value_addr = this->search_within_specific_list(list_idx, key);
-	if (value_addr) std::cout << *value_addr;
-	else std::cout << "non existing";
+	if (!value_addr)
+	{
+		R default_value{};
+		this->insert_element(key, default_value);
+	}
+	value_addr = this->search_within_specific_list(list_idx, key);
 
+	return *value_addr;
 }
 
 template <typename T, typename R>
