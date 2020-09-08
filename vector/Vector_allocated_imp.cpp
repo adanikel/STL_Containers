@@ -1,4 +1,6 @@
-#include <iostream>
+#include <initializer_list>
+#include <stdexcept>  // for out of range
+#include <algorithm> // for std::copy
 
 // an implementation of vector using dynamic memory
 
@@ -47,54 +49,6 @@ public:
 	~Vec(); // destructor is a must since we are initializing an array on the heap
 };
 
-
-Vec<int> int_vec(unsigned int inp) // to test move constructor
-{
-	Vec<int> temp(inp);
-	std::cout << std::endl << "initialized vector! elem location:" << temp.elem;
-
-	return temp;
-}
-
-
-int main()
-{
-	Vec<int> var(3);
-	var.set(0, 0);
-
-	var.resize(9);
-	var[1] = 1;
-	var[2] = 2;
-	var[3] = 3;
-	var[4] = 4;
-	var[5] = 5;
-	var[6] = 6;
-	var[7] = 7;
-	var[8] = 8;
-
-
-	Vec<int>::iterator itr;
-	itr = var.begin();
-	std::cout << "will insert soon" << std::endl;
-	std::cout << "old size is " << var.getsize() << std::endl;
-
-	for (unsigned int idx = 0; idx != var.sz; idx++)
-	{
-		std::cout << var[idx] << std::endl;
-	};
-	var.insert(itr + 1, 0123);
-	std::cout << "inserted!!" << std::endl;
-	for (unsigned int idx = 0; idx != var.sz; idx++)
-	{
-		std::cout << var[idx] << std::endl;
-	};
-	std::cout << "new size is " << var.getsize() << std::endl;
-
-	return 0;
-}
-
-
-
 template <typename T>
 Vec<T>::Vec(const unsigned int inp1)
 	:sz{ inp1 }, space{ inp1 * 2 }, elem{ new T[space] }
@@ -115,7 +69,6 @@ template <typename T>
 Vec<T>::Vec(Vec& src_vec) // initialize using another vector - copy it
 	:sz{ src_vec.sz }, space{ src_vec.space }, elem{ new T[space] }
 {
-	std::cout << std::endl << "A copy constructor was called!" << std::endl;
 	std::copy(src_vec.elem, src_vec.elem + sz, this->elem);
 
 }
@@ -124,10 +77,8 @@ template <typename T>
 Vec<T>::Vec(Vec<T>&& rvalue_vec) noexcept
 	:sz{ rvalue_vec.sz }, space{ rvalue_vec.space }
 {
-	std::cout << std::endl << "An rvalue constructor was called!" << std::endl;
 	this->elem = rvalue_vec.elem; // snatch pointer
 	rvalue_vec.elem = nullptr; // nullify rvalue elem pointer
-	std::cout << std::endl << "The address of 'elem' in the recently initialized vec is " << this->elem;
 
 }
 
@@ -137,7 +88,6 @@ typename Vec<T>::iterator Vec<T>::erase(Vec<T>::iterator plc)
 	for (iterator temp = plc; temp != this->end(); temp++)
 	{
 		*temp = *(temp + 1);
-		std::cout << *temp << std::endl;
 	};
 
 	this->elem[sz - 1] = 0; // sort of destroy? allc is better here
@@ -169,7 +119,6 @@ typename Vec<T>::iterator Vec<T>::insert(Vec<T>::iterator plc, const T& obj)
 template <typename T>
 Vec<T>& Vec<T>::operator= (Vec<T>& obj) // copy
 {
-	std::cout << std::endl << "'=' operator was called!" << std::endl;
 	delete[] elem;
 
 	this->sz = obj.sz;
@@ -186,7 +135,6 @@ Vec<T>& Vec<T>::operator= (Vec<T>& obj) // copy
 template <typename T>
 Vec<T>& Vec<T>::operator= (Vec<T>&& obj) noexcept
 {
-	std::cout << std::endl << "rvalue '=' operator was called!" << std::endl;
 	delete[] this->elem; // reallocate current memory
 	this->sz = obj.sz;
 	this->space = obj.space;
@@ -288,6 +236,5 @@ typename Vec<T>::iterator Vec<T>::reserve(unsigned int new_space)
 template <typename T>
 Vec<T>::~Vec()
 {
-	std::cout << std::endl << "Destructor was called";
 	delete[] elem;
 }
