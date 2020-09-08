@@ -2,6 +2,8 @@
 #include <list>
 
 // todo: if exists, overwrite
+// todo: operator[]
+// todo: iterator will iterate over each list recursively
 
 template <typename T, typename R>
 class UnorderedMapIMP
