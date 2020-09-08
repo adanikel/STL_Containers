@@ -17,7 +17,7 @@ public:
 	unsigned int sz; // size of array
 	T* elem{ nullptr }; // will be the array, initialized as null pointer
 
-	explicit Vec(unsigned int inp1);
+	Vec(unsigned int inp1); // not explicit intentionally (int and size_t are acceptable)
 	explicit Vec(std::initializer_list<T> lst); // to user 'Vec{a, b, c}'
 	Vec(Vec& src_vec);
 	Vec(Vec&& rvalue_vec) noexcept;
