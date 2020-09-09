@@ -74,7 +74,8 @@ Link<T>::Link(const T obj)
 template <typename T>
 Link<T>::~Link()
 {
-	// todo: proper deletion
+	// todo: proper deletion for list
+	// todo: is this enough? each one deletes the other one
 	delete next; 
 	delete prev;
 };
@@ -103,6 +104,7 @@ T* List<T>::push_back(T obj)
 
 	T temp = new Link<T>(obj); 
 	this->last = temp; 
+	if (!this->first) this->first = temp;
 	this->size++; 
 }
 
@@ -113,6 +115,7 @@ T* List<T>::push_front(T obj)
 
 	T temp = new Link<T>(obj);
 	this->first = temp;
+	if (!this->last) this->last = temp;
 	this->size++; 
 }
 
