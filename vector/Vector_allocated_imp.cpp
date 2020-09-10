@@ -58,10 +58,11 @@ template <typename T>
 Vec<T>::Vec(std::initializer_list<T> lst) // initialize as a list
 	: sz{ lst.size() }, space{ lst.size() * 2 }, elem{ new T[space] }
 {
-	T* idx_ptr = elem;
-	for (int idx = 0; idx != sz; idx++) // pass initializer list elements to vector
+	auto lst_itr = lst.begin();
+	for (unsigned int idx = 0; idx != sz; idx++) // pass initializer list elements to vector
 	{
-		this->elem[idx] = *(lst.begin() + idx);
+		this->elem[idx] = *(lst_itr);
+		lst_itr++;
 	}
 }
 

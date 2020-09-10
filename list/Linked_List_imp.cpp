@@ -2,14 +2,17 @@
 
 
 // Linked list
-// todo: proper destructor
+// todo: copy and move constructor and assignment for link and list
+// todo: insert that accepts iterator?
+// todo: maybe sort
+// todo: initializer list
 
 
 template <typename T>
 struct Link
 {
-	T* next;
-	T* prev;
+	Link<T>* next;
+	Link<T>* prev;
 	T value;
 
 	explicit Link(const T obj); // no default constructor
@@ -23,30 +26,36 @@ class List
 {
 private:
 	Link<T>* current_link; // pointer to link. Value inside will not be through a pointer
-	signed int size; // modify every addition / deletion
+	unsigned int size; // modify every addition / deletion
 
 public:
-	Link<T>* first;
+	Link<T>* first; // begin() returns this
 	Link<T>* last;
 
 	List(); // initialize all links as nullptr
 	List(T obj);
+	explicit List(std::initializer_list<T> list_objs); // to user 'Vec{a, b, c}'
 
-	T* push_back(T obj); // todo: add as first index
-	T* push_front(T obj);
+	List(const List<T>& link_obj); // copy constructor
+	List(List<T>&& link_obj); // move constructor
+
+	List<T>& operator=(const List<T>& link_obj); // copy assignment. note that there's operator= definition for T values
+	List<T>& operator=(List<T>&& link_obj); // move assignment
+
+	void push_back(T obj);
+	void push_front(T obj);
 	void forward() {};
 	void backward() {};
 
-	T& operator=(T obj);
+	void clear();
 
-	class iterator
+	T& operator=(T obj); // return current value, unlike copy assignment
+
+	struct iterator
 	{
-	private:
 		Link<T>* current;
 
-	public:
-
-		iterator(List<T> init);
+		iterator(Link<T>* init);
 
 		T& operator*();
 
@@ -56,9 +65,14 @@ public:
 		bool operator==(const iterator& obj) const;
 		bool operator!=(const iterator& obj) const;
 
+		iterator* operator->();
+
 	};
 
-	~List() {};
+	iterator begin() const; // returns first
+	iterator end() const; // returns nullptr
+
+	~List();
 
 };
 
@@ -68,17 +82,12 @@ template <typename T>
 Link<T>::Link(const T obj)
 	: next{ nullptr }, prev{ nullptr }
 {
-	value = obj; 
-};
+	value = obj;
+}
 
 template <typename T>
 Link<T>::~Link()
-{
-	// todo: proper deletion for list
-	// todo: is this enough? each one deletes the other one
-	delete next; 
-	delete prev;
-};
+{}
 
 // List definitions
 
@@ -93,64 +102,179 @@ List<T>::List(T obj) :
 }
 
 template <typename T>
-List<T>::List() :
-	size{ 0 }, current_link{ nullptr }, first{ nullptr }, last{ nullptr }
+List<T>::List()
+	: size{ 0 }, current_link{ nullptr }, first{ nullptr }, last{ nullptr }
 {}
 
 template <typename T>
-T* List<T>::push_back(T obj)
+List<T>::List(std::initializer_list<T> list_objs) // initialize as a list
+	: size{ 0 }, current_link{ nullptr }, first{ nullptr }, last{ nullptr }
 {
-	// todo: add next to index=size-1
-
-	T temp = new Link<T>(obj); 
-	this->last = temp; 
-	if (!this->first) this->first = temp;
-	this->size++; 
+	auto itr = list_objs.begin();
+	while (itr != list_objs.end())
+	{
+		this->push_back(*itr);
+		++itr;
+	}
 }
 
 template <typename T>
-T* List<T>::push_front(T obj) 
+List<T>::List(const List<T>& list_obj)
+	: size{ 0 }, current_link{ nullptr }, first{ nullptr }, last{ nullptr }
 {
-	// todo: add prev to index=0
+	iterator itr = list_obj.begin();
+	while (itr != list_obj.end())
+	{
+		this->push_back(*itr);
+		++itr;
+	}
+}
 
-	T temp = new Link<T>(obj);
+template <typename T>
+List<T>::List(List<T>&& list_obj)
+	: size{ 0 }, current_link{ nullptr }, first{ nullptr }, last{ nullptr }
+{
+	iterator itr = list_obj.begin();
+	while (itr != list_obj.end())
+	{
+		this->push_back(std::move(*itr));
+		++itr;
+	}
+}
+
+template <typename T>
+List<T>& List<T>::operator=(const List<T>& list_obj)
+{
+	this->clear();
+
+	iterator itr = list_obj.begin();
+	while (itr != list_obj.end())
+	{
+		this->push_back(*itr);
+		++itr;
+	}
+
+	return *this;
+}
+
+template <typename T>
+List<T>& List<T>::operator=(List<T>&& list_obj)
+{
+	this->clear();
+
+	iterator itr = list_obj.begin();
+	while (itr != list_obj.end())
+	{
+		this->push_back(std::move(*itr));
+		++itr;
+	}
+
+	return *this;
+}
+
+template <typename T>
+void List<T>::push_back(T obj)
+{
+	Link<T>* temp = new Link<T>(obj);
+
+	if (last)
+	{
+		temp->prev = this->last;
+		this->last->next = temp;
+	}
+
+	this->last = temp;
+	if (!this->first) this->first = temp;
+	this->size++;
+
+}
+
+template <typename T>
+void List<T>::push_front(T obj)
+{
+	Link<T>* temp = new Link<T>(obj);
+
+	if (first)
+	{
+		temp->next = this->first;
+		this->first->prev = temp;
+	}
+
 	this->first = temp;
 	if (!this->last) this->last = temp;
-	this->size++; 
+	this->size++;
 }
 
 template <typename T>
-T& List<T>::operator=(T obj) 
+T& List<T>::operator=(T obj)
 {
-	this->value = obj; 
+	this->value = obj;
 	return this->value;
 }
+
+template <typename T>
+typename List<T>::iterator List<T>::begin() const
+{
+	List<T>::iterator itr(this->first);
+	return itr;
+}
+
+template <typename T>
+typename List<T>::iterator List<T>::end() const
+{
+	return nullptr; // todo: is this ok?
+}
+
+template <typename T>
+void List<T>::clear()
+{
+	iterator itr = this->begin();
+	Link<T>* ptr;
+	while (itr != this->end())
+	{
+		ptr = itr->current;
+		++itr;
+		delete ptr;
+	}
+
+	size = 0;
+	current_link = nullptr;
+	first = nullptr;
+	last = nullptr;
+}
+
+template <typename T>
+List<T>::~List()
+{
+	this->clear();
+}
+
 
 // List::iterator definitions
 
 
 template <typename T>
-List<T>::iterator::iterator(List<T> init)
+List<T>::iterator::iterator(Link<T>* init_itr)
 {
-	this->current = &init; // todo: ?
+	this->current = init_itr; // todo: ?
 }
 
 template <typename T>
-List<T>::iterator& List<T>::iterator::operator++() 
+typename List<T>::iterator& List<T>::iterator::operator++()
 {
-	this->current = this->current->next; 
-	return*this;
-}
-
-template <typename T>
-List<T>::iterator& List<T>::iterator::operator--()
-{
-	this->current = this->current->prev; 
+	this->current = this->current->next;
 	return *this;
 }
 
 template <typename T>
-T& List<T>::iterator::operator*() 
+typename List<T>::iterator& List<T>::iterator::operator--()
+{
+	this->current = this->current->prev;
+	return *this;
+}
+
+template <typename T>
+T& List<T>::iterator::operator*()
 {
 	return this->current->value;
 }
@@ -162,14 +286,45 @@ bool List<T>::iterator::operator==(const iterator& obj) const
 }
 
 template <typename T>
-bool List<T>::iterator::operator!=(const iterator& obj) const 
+bool List<T>::iterator::operator!=(const iterator& obj) const
 {
-	return this->current != obj.current; 
+	return this->current != obj.current;
 }
 
+template <typename T>
+typename List<T>::iterator* List<T>::iterator::operator->()
+{
+	return this;
+}
 
 int main()
 {
-	List<int> var(45);
+	List<int> var_list(1);
+
+	var_list.push_back(2);
+	var_list.push_back(3);
+	var_list.push_back(4);
+	var_list.push_front(0);
+
+
+	List<int>::iterator itr = var_list.begin();
+	while (itr != var_list.end())
+	{
+		std::cout << "\n" << *itr;
+		++itr;
+	}
+
+	List<int> var_list2{};
+	var_list2.push_back(1);
+	var_list = var_list2;
+
+	List<int> var_list3{ 99, 98, 97 };
+	List<int>::iterator itr3 = var_list3.begin();
+	while (itr3 != var_list3.end())
+	{
+		std::cout << "\n" << *itr3;
+		++itr3;
+	}
+
 	return 0;
 }
