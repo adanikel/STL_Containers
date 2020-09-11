@@ -41,6 +41,8 @@ public:
 	void push_back(T obj);
 	void push_front(T obj);
 
+	inline bool empty() const;
+
 	void clear();
 
 	T& operator=(T obj); // return current value, unlike copy assignment
@@ -225,6 +227,12 @@ template <typename T>
 typename List<T>::iterator List<T>::end() const
 {
 	return nullptr; // todo: is this ok?
+}
+
+template <typename T>
+bool List<T>::empty() const
+{
+	return (this->size == 0);
 }
 
 template <typename T>
