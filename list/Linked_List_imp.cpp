@@ -1,12 +1,6 @@
 #include <iostream>
 
-
 // Linked list
-// todo: copy and move constructor and assignment for link and list
-// todo: insert that accepts iterator?
-// todo: maybe sort
-// todo: initializer list
-
 
 template <typename T>
 struct Link
@@ -16,6 +10,8 @@ struct Link
 	T value;
 
 	explicit Link(const T obj); // no default constructor
+
+	Link<T>* operator->();
 
 	~Link();
 
@@ -44,8 +40,6 @@ public:
 
 	void push_back(T obj);
 	void push_front(T obj);
-	void forward() {};
-	void backward() {};
 
 	void clear();
 
@@ -69,6 +63,8 @@ public:
 
 	};
 
+	void insert(iterator& itr_pos, const T value);
+
 	iterator begin() const; // returns first
 	iterator end() const; // returns nullptr
 
@@ -83,6 +79,12 @@ Link<T>::Link(const T obj)
 	: next{ nullptr }, prev{ nullptr }
 {
 	value = obj;
+}
+
+template <typename T>
+Link<T>* Link<T>::operator->()
+{
+	return this;
 }
 
 template <typename T>
@@ -249,6 +251,24 @@ List<T>::~List()
 	this->clear();
 }
 
+template <typename T>
+void List<T>::insert(List<T>::iterator& itr_pos, const T value)
+{
+	Link<T>* new_link = new Link<T>(value);
+	Link<T>* prev_link = itr_pos->current->prev; // previous link
+
+	if (prev_link)
+	{
+		prev_link->next = new_link;
+		new_link->prev = prev_link;
+	}
+
+	new_link->next = itr_pos->current;
+	itr_pos->current->prev = new_link;
+
+	this->size++;
+}
+
 
 // List::iterator definitions
 
@@ -256,7 +276,7 @@ List<T>::~List()
 template <typename T>
 List<T>::iterator::iterator(Link<T>* init_itr)
 {
-	this->current = init_itr; // todo: ?
+	this->current = init_itr;
 }
 
 template <typename T>
@@ -320,6 +340,18 @@ int main()
 
 	List<int> var_list3{ 99, 98, 97 };
 	List<int>::iterator itr3 = var_list3.begin();
+	while (itr3 != var_list3.end())
+	{
+		std::cout << "\n" << *itr3;
+		++itr3;
+	}
+
+	itr3 = var_list3.begin();
+	++itr3;
+
+	var_list3.insert(itr3, 55555);
+
+	itr3 = var_list3.begin();
 	while (itr3 != var_list3.end())
 	{
 		std::cout << "\n" << *itr3;
