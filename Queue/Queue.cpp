@@ -21,7 +21,7 @@ public:
 	Queue(Queue& src_queue); // copy constructor not const - to access iterator methods
 	Queue(Queue&& r_queue) noexcept;
 
-	//T& operator= (const Queue<T>& queue);
+	Queue<T>& operator= (Queue<T>& queue_obj);
 	//T&& operator= (Queue<T>&& r_queue) noexcept;
 	
 	//void enqueue(const T& val);
@@ -39,10 +39,14 @@ public:
 int main()
 {
 	Queue<int> x( 4 );
-	Queue<int> y(std::initializer_list<int>{1, 2, 3}); // construct with initializer list
+	Queue<int> y(std::initializer_list<int>{1, 2, 3, 4, 5}); // construct with initializer list
 	Queue<int> z(y);
 
 	Queue<int> a( Queue<int>(std::initializer_list<int>{4, 5, 6}) );
+	
+	a = y;
+	std::cout << "a = y and a's capcity is: " << a.capacity() << std::endl;
+	std::cout<< "a vs y memory locations " << &a << " " << &y << std::endl;
 	
 	return 0;
 }
@@ -91,6 +95,22 @@ Queue<T>::Queue(Queue&& r_queue) noexcept
 	
 	_first_index = &_elements[0];
 	_last_index = &_elements[_size - 1];
+}
+
+template <typename T>
+Queue<T>& Queue<T>::operator=(Queue<T>& queue_obj)
+{
+	delete[] _elements; // delete original queue
+	this->_size = queue_obj.capacity();
+	this->_elements = new T[this->_size];
+
+	unsigned int elem_idx{ 0 };
+	for (T* itr = queue_obj._begin(); itr != queue_obj._end(); itr++)
+	{
+		this->_elements[elem_idx] = *itr;
+	}
+	
+	return *this;
 }
 
 
