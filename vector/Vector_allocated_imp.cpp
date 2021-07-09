@@ -22,10 +22,10 @@ public:
 
 	Vec(unsigned int inp1); // not explicit intentionally (int and size_t are acceptable)
 	explicit Vec(std::initializer_list<T> lst); // to user 'Vec{a, b, c}'
-	Vec(Vec& src_vec);
+	Vec(const Vec& src_vec);
 	Vec(Vec&& rvalue_vec) noexcept;
 
-	Vec<T>& operator= (Vec<T>& obj); // redefining = operator
+	Vec<T>& operator= (const Vec<T>& obj); // redefining = operator
 	Vec<T>& operator= (Vec<T>&& obj) noexcept; // redefining = operator for rvalue
 	T& operator[] (const int index); // redefining [] operator
 	T operator[] (const int index) const; // redefining [] operator for constant!! does not return a reference!!
@@ -47,7 +47,7 @@ public:
 	inline unsigned int capacity() { return _space; };
 	T& at(const int pos); // checks for out of range error unlike [] operators
 
-	~Vec(); // destructor is a must since we are initializing an array on the heap
+	~Vec(); // deallocate memory; another alternative is to use a unique_ptr
 };
 
 int main()
@@ -85,7 +85,9 @@ int main()
 	std::cout << "reserving new space... old capacity is " << var.capacity() << std::endl;
 	var.reserve(2 * var.capacity());
 	std::cout << "reserved, new capacity is " << var.capacity() << std::endl;
-
+	
+	std::cout << "testing copy const" << std::endl;
+	Vec<int> var2{ var };
 	return 0;
 }
 
@@ -108,8 +110,8 @@ Vec<T>::Vec(std::initializer_list<T> lst) // initialize as a list
 }
 
 template <typename T>
-Vec<T>::Vec(Vec& src_vec) // initialize using another vector - copy it
-	:sz{ src_vec.sz }, _space{ src_vec.space }, elem{ new T[_space] }
+Vec<T>::Vec(const Vec& src_vec) // initialize using another vector - copy it
+	:sz{ src_vec.sz }, _space{ src_vec._space }, elem{ new T[_space] }
 {
 	std::copy(src_vec.elem, src_vec.elem + sz, this->elem);
 
@@ -159,7 +161,7 @@ typename Vec<T>::iterator Vec<T>::insert(Vec<T>::iterator plc, const T& obj)
 
 
 template <typename T>
-Vec<T>& Vec<T>::operator= (Vec<T>& obj) // copy
+Vec<T>& Vec<T>::operator= (const Vec<T>& obj) // copy
 {
 	delete[] elem;
 
