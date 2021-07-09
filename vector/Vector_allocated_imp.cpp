@@ -7,7 +7,6 @@
 
 // todo: 
 // 1. organize the class
-// 2. export main() outside
 
 
 template <typename T>
@@ -82,6 +81,9 @@ int main()
 		std::cout << var[idx] << std::endl;
 	};
 	std::cout << "new size is " << var.getsize() << std::endl;
+	std::cout << "reserving new space... old capacity is " << var.capacity() << std::endl;
+	var.reserve(2 * var.capacity());
+	std::cout << "reserved, new capacity is " << var.capacity() << std::endl;
 
 	return 0;
 }
@@ -259,13 +261,11 @@ void Vec<T>::resize(unsigned int new_sz)
 template <typename T>
 typename Vec<T>::iterator Vec<T>::reserve(unsigned int new_space)
 {
-	T* temp = new T[new_space];
-	std::copy(elem, elem + sz, temp);
+	T* new_elem = new T[new_space];
+	std::copy(elem, elem + sz, new_elem);
 	delete[] elem;
-	this->elem = new T[new_space];
-	std::copy(temp, temp + sz, elem);
+	this->elem = new_elem;
 
-	delete[] temp;
 	this->space = new_space;
 
 	return this->begin();
