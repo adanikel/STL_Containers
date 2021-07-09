@@ -1,6 +1,7 @@
 #include <initializer_list>
 #include <stdexcept>  // for out of range
 #include <algorithm> // for std::copy
+#include <iostream>
 
 // an implementation of vector using dynamic memory
 
@@ -48,6 +49,43 @@ public:
 
 	~Vec(); // destructor is a must since we are initializing an array on the heap
 };
+
+int main()
+{
+	Vec<int> var(3);
+	var.set(0, 0);
+
+	var.resize(9);
+	var[1] = 1;
+	var[2] = 2;
+	var[3] = 3;
+	var[4] = 4;
+	var[5] = 5;
+	var[6] = 6;
+	var[7] = 7;
+	var[8] = 8;
+
+	Vec<int>::iterator itr;
+	itr = var.begin();
+	std::cout << "will insert soon" << std::endl;
+	std::cout << "old size is " << var.getsize() << std::endl;
+
+	for (unsigned int idx = 0; idx != var.sz; idx++)
+		
+	{	
+		std::cout << var[idx] << std::endl;
+	};
+	var.insert(itr + 1, 0123);
+	std::cout << "inserted!!" << std::endl;
+	for (unsigned int idx = 0; idx != var.sz; idx++)
+	{
+		std::cout << var[idx] << std::endl;
+	};
+	std::cout << "new size is " << var.getsize() << std::endl;
+
+	return 0;
+}
+
 
 template <typename T>
 Vec<T>::Vec(const unsigned int inp1)
