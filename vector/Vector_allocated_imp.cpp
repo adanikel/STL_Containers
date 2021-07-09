@@ -32,7 +32,7 @@ public:
 
 	using iterator = T*;
 	iterator begin() { return &(elem[0]); } // pointer to first element
-	iterator end() { return &elem[sz - 1]; } // pointer to last element
+	iterator end() { return &elem[sz]; } // pointer to last element
 	iterator insert(iterator plc, const T& obj); // insert new objects
 	iterator erase(iterator plc); // erase existing objects
 
@@ -147,7 +147,7 @@ typename Vec<T>::iterator Vec<T>::insert(Vec<T>::iterator plc, const T& obj)
 	if (!(this->sz + 1 < this->_space)) this->reserve(sz * this->_DEF_EXT_VAL);
 	plc = this->begin() + loc;
 
-	for (iterator temp = this->end() + 1; temp != plc; temp--) // end()+1 works because we have that space reserved!
+	for (iterator temp = this->end(); temp != plc; temp--) 
 	{
 		*temp = *(temp - 1);
 	};
