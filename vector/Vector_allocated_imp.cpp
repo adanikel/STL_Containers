@@ -13,7 +13,8 @@ template <typename T>
 class Vec
 {
 private:
-	unsigned int space;
+	unsigned int _space; // available space
+	unsigned int _DEF_EXT_VAL = 2;
 
 public:
 	unsigned int sz; // size of array
@@ -43,7 +44,7 @@ public:
 	void resize(unsigned int new_sz);
 	inline bool empty() { return (sz == 0); };
 	iterator reserve(unsigned int new_space);
-	inline unsigned int capacity() { return space; };
+	inline unsigned int capacity() { return _space; };
 	T& at(const int pos); // checks for out of range error unlike [] operators
 
 	~Vec(); // destructor is a must since we are initializing an array on the heap
@@ -91,12 +92,12 @@ int main()
 
 template <typename T>
 Vec<T>::Vec(const unsigned int inp1)
-	:sz{ inp1 }, space{ inp1 * 2 }, elem{ new T[space] }
+	:sz{ inp1 }, _space{ inp1 * 2 }, elem{ new T[_space] }
 {}
 
 template <typename T>
 Vec<T>::Vec(std::initializer_list<T> lst) // initialize as a list
-	: sz{ lst.size() }, space{ lst.size() * 2 }, elem{ new T[space] }
+	: sz{ lst.size() }, _space{ lst.size() * 2 }, elem{ new T[_space] }
 {
 	auto lst_itr = lst.begin();
 	for (unsigned int idx = 0; idx != sz; idx++) // pass initializer list elements to vector
@@ -108,7 +109,7 @@ Vec<T>::Vec(std::initializer_list<T> lst) // initialize as a list
 
 template <typename T>
 Vec<T>::Vec(Vec& src_vec) // initialize using another vector - copy it
-	:sz{ src_vec.sz }, space{ src_vec.space }, elem{ new T[space] }
+	:sz{ src_vec.sz }, _space{ src_vec.space }, elem{ new T[_space] }
 {
 	std::copy(src_vec.elem, src_vec.elem + sz, this->elem);
 
@@ -116,7 +117,7 @@ Vec<T>::Vec(Vec& src_vec) // initialize using another vector - copy it
 
 template <typename T>
 Vec<T>::Vec(Vec<T>&& rvalue_vec) noexcept
-	:sz{ rvalue_vec.sz }, space{ rvalue_vec.space }
+	:sz{ rvalue_vec.sz }, _space{ rvalue_vec._space }
 {
 	this->elem = rvalue_vec.elem; // snatch pointer
 	rvalue_vec.elem = nullptr; // nullify rvalue elem pointer
@@ -141,7 +142,7 @@ template <typename T>
 typename Vec<T>::iterator Vec<T>::insert(Vec<T>::iterator plc, const T& obj)
 {
 	unsigned int loc = plc - this->begin(); // might be invalidated if 'reserve' is called, and therefore I save the location
-	if (!(this->sz + 1 < this->space)) this->reserve(sz * 2);
+	if (!(this->sz + 1 < this->_space)) this->reserve(sz * this->_DEF_EXT_VAL);
 	plc = this->begin() + loc;
 
 	for (iterator temp = this->end() + 1; temp != plc; temp--) // end()+1 works because we have that space reserved!
@@ -178,7 +179,7 @@ Vec<T>& Vec<T>::operator= (Vec<T>&& obj) noexcept
 {
 	delete[] this->elem; // reallocate current memory
 	this->sz = obj.sz;
-	this->space = obj.space;
+	this->_space = obj._space;
 
 	elem = obj.elem; // snatch pointer from origin
 	obj.elem = nullptr; // nullify origin pointer
@@ -208,7 +209,7 @@ T& Vec<T>::at(const int pos)
 template <typename T>
 void Vec<T>::set(const unsigned int pos, const T obj)
 {
-	if (!(this->sz + 1 < this->space)) this->reserve(sz * 2);
+	if (!(this->sz + 1 < this->_space)) this->reserve(sz * this->_DEF_EXT_VAL);
 
 	if (!(pos >= 0 && pos < this->sz)) throw std::out_of_range("Vector out of range error");
 	this->elem[pos] = obj;
@@ -225,7 +226,7 @@ T Vec<T>::get(const int pos)
 template <typename T>
 void Vec<T>::push_back(const T obj)
 {
-	if (!(this->sz + 1 < this->space)) this->reserve(sz * 2);
+	if (!(this->sz + 1 < this->_space)) this->reserve(sz * this->_DEF_EXT_VAL);
 
 	this->elem[sz] = obj;
 	this->sz++;
@@ -266,7 +267,7 @@ typename Vec<T>::iterator Vec<T>::reserve(unsigned int new_space)
 	delete[] elem;
 	this->elem = new_elem;
 
-	this->space = new_space;
+	this->_space = new_space;
 
 	return this->begin();
 }
