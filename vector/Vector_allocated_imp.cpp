@@ -33,7 +33,7 @@ public:
 	using iterator = T*;
 	iterator begin() { return &(elem[0]); } // pointer to first element
 	iterator end() { return &elem[sz]; } // pointer to last element
-	iterator insert(iterator plc, const T& obj); // insert new objects
+	iterator insert(iterator plc, const T obj); // insert new objects
 	iterator erase(iterator plc); // erase existing objects
 
 	void set(const unsigned int pos, T obj);
@@ -70,13 +70,18 @@ int main()
 	std::cout << "will insert soon" << std::endl;
 	std::cout << "old size is " << var.getsize() << std::endl;
 
-	for (unsigned int idx = 0; idx != var.sz; idx++)
-		
+	for (unsigned int idx = 0; idx != var.sz; idx++)	
 	{	
 		std::cout << var[idx] << std::endl;
 	};
-	var.insert(itr + 1, 0123);
-	std::cout << "inserted!!" << std::endl;
+	var.insert(itr + 1, 999);
+	std::cout << "inserted 999 as first index" << std::endl;
+	for (unsigned int idx = 0; idx != var.sz; idx++)
+	{
+		std::cout << var[idx] << std::endl;
+	};
+	std::cout << "now erase" << std::endl;
+	var.erase(itr);
 	for (unsigned int idx = 0; idx != var.sz; idx++)
 	{
 		std::cout << var[idx] << std::endl;
@@ -94,12 +99,12 @@ int main()
 
 template <typename T>
 Vec<T>::Vec(const unsigned int inp1)
-	:sz{ inp1 }, _space{ inp1 * 2 }, elem{ new T[_space] }
+	:sz{ inp1 }, _space{ inp1 * _DEF_EXT_VAL }, elem{ new T[_space] }
 {}
 
 template <typename T>
 Vec<T>::Vec(std::initializer_list<T> lst) // initialize as a list
-	: sz{ lst.size() }, _space{ lst.size() * 2 }, elem{ new T[_space] }
+	: sz{ lst.size() }, _space{ lst.size() * _DEF_EXT_VAL }, elem{ new T[_space] }
 {
 	auto lst_itr = lst.begin();
 	for (unsigned int idx = 0; idx != sz; idx++) // pass initializer list elements to vector
@@ -129,25 +134,24 @@ Vec<T>::Vec(Vec<T>&& rvalue_vec) noexcept
 template <typename T>
 typename Vec<T>::iterator Vec<T>::erase(Vec<T>::iterator plc)
 {
-	for (iterator temp = plc; temp != this->end(); temp++)
+	for (iterator temp = plc; temp != this->end() - 1; temp++)
 	{
 		*temp = *(temp + 1);
 	};
 
-	this->elem[sz - 1] = 0; // sort of destroy? allc is better here
 	--this->sz;
 
 	return plc;
 }
 
 template <typename T>
-typename Vec<T>::iterator Vec<T>::insert(Vec<T>::iterator plc, const T& obj)
+typename Vec<T>::iterator Vec<T>::insert(Vec<T>::iterator plc, const T obj)
 {
 	unsigned int loc = plc - this->begin(); // might be invalidated if 'reserve' is called, and therefore I save the location
 	if (!(this->sz + 1 < this->_space)) this->reserve(sz * this->_DEF_EXT_VAL);
 	plc = this->begin() + loc;
 
-	for (iterator temp = this->end(); temp != plc; temp--) 
+	for (iterator temp = this->end() - 1; temp != plc; temp--) 
 	{
 		*temp = *(temp - 1);
 	};
