@@ -24,11 +24,13 @@ public:
 	Queue<T>& operator= (Queue<T>& queue_obj);
 	Queue<T>& operator= (Queue<T>&& r_queue) noexcept;
 	
-	//void enqueue(const T& val);
+	void enqueue(const T& val);
 	//void enqueue(T&& r_val);
 
 	//T dequeue(); // not ref because deleting 
 	
+	//bool is_full() const;
+	//bool is_empty() const;
 	unsigned int capacity() const { return _size; };
 	//unsigned int getsize() const; // return number of elements...	
 	
@@ -123,6 +125,12 @@ Queue<T>& Queue<T>::operator=(Queue<T>&& r_queue) noexcept
 	r_queue._elements = nullptr;
 	return *this;
 
+}
+
+template <typename T>
+void Queue<T>::enqueue(const T& val)
+{
+	// todo define
 }
 
 template <typename T>
