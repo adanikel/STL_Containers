@@ -22,7 +22,7 @@ public:
 	Queue(Queue&& r_queue) noexcept;
 
 	Queue<T>& operator= (Queue<T>& queue_obj);
-	//T&& operator= (Queue<T>&& r_queue) noexcept;
+	Queue<T>& operator= (Queue<T>&& r_queue) noexcept;
 	
 	//void enqueue(const T& val);
 	//void enqueue(T&& r_val);
@@ -32,7 +32,7 @@ public:
 	unsigned int capacity() const { return _size; };
 	//unsigned int getsize() const; // return number of elements...	
 	
-	//~Queue(); // deallocate memory
+	~Queue(); // deallocate memory
 	
 };
 
@@ -47,7 +47,8 @@ int main()
 	a = y;
 	std::cout << "a = y and a's capcity is: " << a.capacity() << std::endl;
 	std::cout<< "a vs y memory locations " << &a << " " << &y << std::endl;
-	
+	a = Queue<int>(std::initializer_list<int>{8, 7, 6});
+	std::cout << "a = rvalue(new queue) and its capacity is " << a.capacity() << std::endl;
 	return 0;
 }
 
@@ -109,9 +110,24 @@ Queue<T>& Queue<T>::operator=(Queue<T>& queue_obj)
 	{
 		this->_elements[elem_idx] = *itr;
 	}
-	
 	return *this;
 }
 
+template <typename T>
+Queue<T>& Queue<T>::operator=(Queue<T>&& r_queue) noexcept
+{
+	delete[] _elements;
+	this->_size = r_queue.capacity();
+	this->_elements = r_queue._elements;
 
+	r_queue._elements = nullptr;
+	return *this;
+
+}
+
+template <typename T>
+Queue<T>::~Queue()
+{
+	delete[] _elements;
+}
 
