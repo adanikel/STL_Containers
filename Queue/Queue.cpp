@@ -13,8 +13,8 @@ private:
 	using iterator = T*;
 	iterator _first_index{ nullptr };
 	iterator _last_index{ nullptr };
-	iterator _begin() { return &(_elements[0]); };
-	iterator _end() { return &(_elements[_size]); };
+	iterator _begin() const { return &(_elements[0]); };
+	iterator _end() const { return &(_elements[_size]); };
 public:
 	Queue(unsigned int size); // not explicit - int and size_t are accepted
 	explicit Queue(std::initializer_list<T> lst);
@@ -24,13 +24,13 @@ public:
 	Queue<T>& operator= (Queue<T>& queue_obj);
 	Queue<T>& operator= (Queue<T>&& r_queue) noexcept;
 	
-	void enqueue(const T& val);
+	void enqueue(const T val);
 	//void enqueue(T&& r_val);
 
 	//T dequeue(); // not ref because deleting 
 	
-	//bool is_full() const;
-	//bool is_empty() const;
+	bool is_full() const;
+	bool is_empty() const { return {!this->_first_index && !this->_last_index}; };
 	unsigned int capacity() const { return _size; };
 	//unsigned int getsize() const; // return number of elements...	
 	
@@ -51,6 +51,8 @@ int main()
 	std::cout<< "a vs y memory locations " << &a << " " << &y << std::endl;
 	a = Queue<int>(std::initializer_list<int>{8, 7, 6});
 	std::cout << "a = rvalue(new queue) and its capacity is " << a.capacity() << std::endl;
+	std::cout << "is x full VS is y full: " << x.is_full() << " " << y.is_full() << std::endl; // should be 0 1
+	std::cout << "is x empty VS is y empty: " << x.is_empty() << " " << y.is_empty() << std::endl; // should be 1 0	
 	return 0;
 }
 
@@ -128,9 +130,18 @@ Queue<T>& Queue<T>::operator=(Queue<T>&& r_queue) noexcept
 }
 
 template <typename T>
-void Queue<T>::enqueue(const T& val)
+void Queue<T>::enqueue(const T val)
 {
 	// todo define
+	if (this->is_full()) std::cout << "cannot enqueue... queue is full" << std::endl;
+	
+		
+}
+
+template <typename T>
+bool Queue<T>::is_full() const
+{
+	return this->_last_index== this->_end() - 1; 
 }
 
 template <typename T>
