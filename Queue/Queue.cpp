@@ -134,7 +134,10 @@ void Queue<T>::enqueue(const T val)
 {
 	// todo define
 	if (this->is_full()) std::cout << "cannot enqueue... queue is full" << std::endl;
-	
+	// if full: dont do,
+	// if empty: initialize both indices to element 0
+	// if not full and not empty:
+	// 	add element and ++first index		
 		
 }
 
