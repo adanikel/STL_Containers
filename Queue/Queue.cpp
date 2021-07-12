@@ -10,6 +10,7 @@ private:
 	unsigned int _size;
 	T* _elements{ nullptr };
 	void _reset_indices();
+	void _cpy_elements(const Queue& other_queue);
 
 	using iterator = T*;
 	iterator _first_index{ nullptr };
@@ -88,14 +89,7 @@ Queue<T>::Queue(Queue& src_queue)
 {
 	if (!src_queue.is_empty())  
         {
-                unsigned int start_idx = src_queue._first_index - src_queue._begin();
-                this->_first_index = &this->_elements[start_idx];
-                for (T* itr = src_queue._first_index; itr != src_queue._last_index; itr++)
-                {
-                        this->_elements[start_idx] = *itr;
-                        start_idx++;
-                }      
-                this->_last_index = &this->_elements[start_idx] + 1; // after we incremented it till first index
+		this->_cpy_elements(src_queue);
         }	
 }
 
@@ -122,15 +116,7 @@ Queue<T>& Queue<T>::operator=(Queue<T>& queue_obj)
 	}
 	else
 	{
-		unsigned int start_idx = queue_obj._first_index - queue_obj._begin();
-		this->_first_index = &this->_elements[start_idx];
-		for (T* itr = queue_obj._first_index; itr != queue_obj._last_index; itr++)
-		{
-			this->_elements[start_idx] = *itr;
-			start_idx++;
-		}
-		
-		this->_last_index = &this->_elements[start_idx + 1]; // after we incremented it till first index
+		this->_cpy_elements(queue_obj);	
 	}
 	return *this;
 }
@@ -230,6 +216,20 @@ void Queue<T>::_reset_indices()
 {
 	this->_first_index = nullptr;
 	this->_last_index = nullptr;	
+}
+
+template <typename T>
+void Queue<T>::_cpy_elements(const Queue& other_queue)
+{
+	unsigned int start_idx = other_queue._first_index - other_queue._begin();
+        this->_first_index = &this->_elements[start_idx];
+        for (T* itr = other_queue._first_index; itr != other_queue._last_index; itr++)
+        {       
+                this->_elements[start_idx] = *itr;
+                start_idx++;
+        }
+             
+	this->_last_index = &this->_elements[start_idx + 1]; // after we incremented it till first index	
 }
 
 template <typename T>
