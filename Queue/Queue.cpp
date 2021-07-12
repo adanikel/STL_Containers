@@ -32,7 +32,7 @@ public:
 	bool is_full() const;
 	bool is_empty() const { return {!this->_first_index && !this->_last_index}; };
 	unsigned int capacity() const { return _size; };
-	//unsigned int getsize() const; // return number of elements...	
+	unsigned int getsize() const; // return number of elements...	
 	
 	~Queue(); // deallocate memory
 	
@@ -199,6 +199,12 @@ bool Queue<T>::is_full() const
 {
 	return this->_last_index == this->_end() - 1; 
 }
+
+template <typename T>
+unsigned int Queue<T>::getsize() const
+{ 
+	return 0 ? this->is_empty() : this->_last_index - this->_first_index; 
+};
 
 template <typename T>
 Queue<T>::~Queue()
