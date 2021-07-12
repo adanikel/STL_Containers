@@ -5,7 +5,8 @@
 // todo: 
 // 1. define enqeuee
 // 2. define enqueue rval
-// 3. define deqeuue
+// 3. define deqeuu
+// 4. take care of main_2e
 
 template <typename T>
 class CircularQueue : public Queue<T>
