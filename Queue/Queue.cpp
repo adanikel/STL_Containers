@@ -203,7 +203,7 @@ bool Queue<T>::is_full() const
 	return this->_last_index == this->_end(); 
 }
 
-template <typename T>
+p_AJtWGUGvxQX7tWNth3eIGZdIet5nH144sBw6emplate <typename T>
 unsigned int Queue<T>::get_size() const
 { 
 	return 0 ? this->is_empty() : this->_last_index - this->_first_index; 

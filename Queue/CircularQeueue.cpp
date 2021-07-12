@@ -52,7 +52,7 @@ void CircularQueue<T>::enqueue(const T& val)
 		{
 			this->_last_index = this->_begin() + 1;
 		        this->_first_index = this->_begin();
-			*this->_first_index = val
+			*this->_first_index = val;
 		}
 		else // todo: circular here
 		{
@@ -81,18 +81,18 @@ void CircularQueue<T>::enqueue(T&& r_val)
 		{
 			this->_last_index = this->_begin() + 1;
 			this->_first_index = this->_begin();
-			*this->_first_index = std::move(val)
+			*this->_first_index = std::move(r_val);
 		}
 		else
 		{
 			if (this->_last_index == this->_end())
 			{
-				this->_last_index = this->_begin() 
-				*this->_begin() = std::move(val);
+				this->_last_index = this->_begin(); 
+				*this->_begin() = std::move(r_val);
 			}
 			else
 			{
-			*this->_last_index = std::move(val);
+			*this->_last_index = std::move(r_val);
 	                this->_last_index++;
 			}
 		}
@@ -103,5 +103,23 @@ void CircularQueue<T>::enqueue(T&& r_val)
 template <typename T>
 T CircularQueue<T>::dequeue()
 {
+	if (!this->is_empty())
+	{
+		T val = *this->_first_index;
+		--this->_elem_count;
+		if (this->_elem_count) // TODO define... if got here then: queue is not empty, and is also not empty after the "--" 
+		{
+			this->_first_index = this->_first_index + 1 ? this->_first_index + 1 < this->_end() : this->_begin(); // TODO what is last element was dequeued
+		}
+		else // TODO queue is not empty but has zero elements?
+		{
+			this->_reset_indices();
+		}
 
+	}
+	else
+	{
+		throw;
+	}
 }
+
