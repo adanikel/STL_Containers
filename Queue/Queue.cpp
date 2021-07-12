@@ -34,7 +34,7 @@ public:
 	virtual bool is_full() const;
 	bool is_empty() const { return {!this->_first_index && !this->_last_index}; };
 	unsigned int capacity() const { return _size; };
-	unsigned int getsize() const; // return number of elements...	
+	virtual unsigned int get_size() const; // return number of elements...	
 	
 	~Queue(); // deallocate memory
 	
@@ -204,7 +204,7 @@ bool Queue<T>::is_full() const
 }
 
 template <typename T>
-unsigned int Queue<T>::getsize() const
+unsigned int Queue<T>::get_size() const
 { 
 	return 0 ? this->is_empty() : this->_last_index - this->_first_index; 
 };
