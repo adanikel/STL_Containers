@@ -9,6 +9,7 @@ class Queue
 private:
 	unsigned int _size;
 	T* _elements{ nullptr };
+	void _reset_indices();
 
 	using iterator = T*;
 	iterator _first_index{ nullptr };
@@ -27,7 +28,7 @@ public:
 	void enqueue(const T& val);
 	void enqueue(T&& r_val);
 
-	//T dequeue(); // not ref because deleting 
+	T dequeue(); // not ref because deleting 
 	
 	bool is_full() const;
 	bool is_empty() const { return {!this->_first_index && !this->_last_index}; };
@@ -56,6 +57,8 @@ int main()
 	std::cout << "enqueue 2 and 4&& to empty queue x " << std::endl;
 	x.enqueue(2);
 	x.enqueue(2 + 2);
+	std::cout << "dequeue from x: " << x.dequeue() << std::endl;
+	std::cout << "dequeue from x again: " << x.dequeue() << std::endl;
 	return 0;
 }
 
@@ -115,9 +118,7 @@ Queue<T>& Queue<T>::operator=(Queue<T>& queue_obj)
 	this->_elements = new T[this->_size];
 	if (queue_obj.is_empty()) // nullify old values if existed
 	{
-		this->_first_index = nullptr;
-		this->_last_index = nullptr;
-
+		this->_reset_indices();
 	}
 	else
 	{
@@ -143,8 +144,7 @@ Queue<T>& Queue<T>::operator=(Queue<T>&& r_queue) noexcept
 	
 	if (r_queue.is_empty()) 
 	{
-		this->_first_index = nullptr;
-		this->_last_index = nullptr;
+		this->_reset_indices();
 	}
 	else
 	{
@@ -195,6 +195,25 @@ void Queue<T>::enqueue(T&& r_val)
 }
 
 template <typename T>
+T Queue<T>::dequeue()
+{
+	if (!this->is_empty())
+	{
+		T val = *this->_first_index;
+		if ((++this->_first_index) == this->_end())
+		{
+			this->_reset_indices();
+		}
+		
+		return val;
+	}
+	else
+	{
+		throw;
+	}
+}
+
+template <typename T>
 bool Queue<T>::is_full() const
 {
 	return this->_last_index == this->_end() - 1; 
@@ -205,6 +224,13 @@ unsigned int Queue<T>::getsize() const
 { 
 	return 0 ? this->is_empty() : this->_last_index - this->_first_index; 
 };
+
+template <typename T>
+void Queue<T>::_reset_indices()
+{
+	this->_first_index = nullptr;
+	this->_last_index = nullptr;	
+}
 
 template <typename T>
 Queue<T>::~Queue()
