@@ -165,8 +165,7 @@ void Queue<T>::enqueue(const T& val)
 template <typename T>
 void Queue<T>::enqueue(T&& r_val)
 {       
-        // todo define
-        if (this->is_full()) std::cout << "cannot enqueue... queue is full" << std::endl;
+        if (this->is_full()) throw; 
         if (this->is_empty())
         {       
                 this->_last_index = this->_begin() + 1;
@@ -202,7 +201,7 @@ T Queue<T>::dequeue()
 template <typename T>
 bool Queue<T>::is_full() const
 {
-	return this->_last_index == this->_end() - 1; 
+	return this->_last_index == this->_end(); 
 }
 
 template <typename T>
