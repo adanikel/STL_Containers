@@ -24,8 +24,8 @@ public:
 	Queue<T>& operator= (Queue<T>& queue_obj);
 	Queue<T>& operator= (Queue<T>&& r_queue) noexcept;
 	
-	void enqueue(const T val);
-	//void enqueue(T&& r_val);
+	void enqueue(const T& val);
+	void enqueue(T&& r_val);
 
 	//T dequeue(); // not ref because deleting 
 	
@@ -53,8 +53,9 @@ int main()
 	std::cout << "a = rvalue(new queue) and its capacity is " << a.capacity() << std::endl;
 	std::cout << "is x full VS is y full: " << x.is_full() << " " << y.is_full() << std::endl; // should be 0 1
 	std::cout << "is x empty VS is y empty: " << x.is_empty() << " " << y.is_empty() << std::endl; // should be 1 0	
-	std::cout << "enqueue 2 to empty queue x " << std::endl;
+	std::cout << "enqueue 2 and 4&& to empty queue x " << std::endl;
 	x.enqueue(2);
+	x.enqueue(2 + 2);
 	return 0;
 }
 
@@ -155,11 +156,10 @@ Queue<T>& Queue<T>::operator=(Queue<T>&& r_queue) noexcept
 	}
 	r_queue._elements = nullptr;
 	return *this;
-
 }
 
 template <typename T>
-void Queue<T>::enqueue(const T val)
+void Queue<T>::enqueue(const T& val)
 {
 	// todo define
 	if (this->is_full()) std::cout << "cannot enqueue... queue is full" << std::endl;
@@ -174,11 +174,24 @@ void Queue<T>::enqueue(const T val)
 		*this->_last_index = val;
 		this->_last_index++;
 	}
-	// if full: dont do,
-	// if empty: initialize both indices to element 0
-	// if not full and not empty:
-	// 	add element and ++first index		
-		
+}
+
+template <typename T>
+void Queue<T>::enqueue(T&& r_val)
+{       
+        // todo define
+        if (this->is_full()) std::cout << "cannot enqueue... queue is full" << std::endl;
+        if (this->is_empty())
+        {       
+                this->_last_index = this->_begin() + 1;
+                this->_first_index = this->_begin();
+                *this->_first_index = std::move(r_val);
+        }
+        else
+        {       
+                *this->_last_index = std::move(r_val);
+                this->_last_index++;
+        }
 }
 
 template <typename T>
