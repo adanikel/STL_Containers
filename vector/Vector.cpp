@@ -3,7 +3,7 @@
 #include <algorithm> // for std::copy
 #include <iostream>
 
-// an implementation of vector using dynamic memory
+// an implementation of vector using dynamic memory and arrays
 
 // todo: 
 // 1. organize the class
