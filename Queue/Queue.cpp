@@ -6,7 +6,7 @@
 template <typename T>
 class Queue
 {
-private:
+protected:
 	unsigned int _size;
 	T* _elements{ nullptr };
 	void _reset_indices();
@@ -26,12 +26,12 @@ public:
 	Queue<T>& operator= (Queue<T>& queue_obj);
 	Queue<T>& operator= (Queue<T>&& r_queue) noexcept;
 	
-	void enqueue(const T& val);
-	void enqueue(T&& r_val);
+	virtual void enqueue(const T& val);
+	virtual void enqueue(T&& r_val);
 
-	T dequeue(); // not ref because deleting 
+	virtual T dequeue(); // not ref because deleting 
 	
-	bool is_full() const;
+	virtual bool is_full() const;
 	bool is_empty() const { return {!this->_first_index && !this->_last_index}; };
 	unsigned int capacity() const { return _size; };
 	unsigned int getsize() const; // return number of elements...	
@@ -40,7 +40,7 @@ public:
 	
 };
 
-int main()
+int main_2() // todo remove _2
 {
 	Queue<int> x( 4 );
 	Queue<int> y(std::initializer_list<int>{1, 2, 3, 4, 5}); // construct with initializer list
@@ -147,8 +147,7 @@ Queue<T>& Queue<T>::operator=(Queue<T>&& r_queue) noexcept
 template <typename T>
 void Queue<T>::enqueue(const T& val)
 {
-	// todo define
-	if (this->is_full()) std::cout << "cannot enqueue... queue is full" << std::endl;
+	if (this->is_full()) throw;
 	if (this->is_empty())
 	{
 		this->_last_index = this->_begin() + 1;
