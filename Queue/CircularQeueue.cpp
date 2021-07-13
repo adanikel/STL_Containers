@@ -34,8 +34,10 @@ int main()
 	CircularQueue<int> d(std::initializer_list<int>{40, 50, 60});
 	std::cout << " is d full? " << d.is_full() << std::endl;
 	std::cout << " d size is " << d.get_size() << std::endl;
-//	std::cout << "enqueue 70 " << std::endl;
-//	d.enqueue(70);
+	std::cout << "dequeue one and enqueue 70 " << std::endl;
+	std::cout << " d size is " << d.get_size() << " and the dequeue value is " << d.dequeue() << std::endl;
+	d.enqueue(70);
+//	;
 	
 	unsigned int elems = d.get_size();
 	while (elems)
