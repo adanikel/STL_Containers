@@ -7,7 +7,7 @@ template <typename T, typename R>
 class UnorderedMap
 {
 
-	unsigned int _DEF_BUCKETS_SZ{ 100 };
+	const unsigned int _DEF_BUCKETS_SZ{ 100 };
 	unsigned int buckets_sz;
 	unsigned int get_hashed_value(const T key) const;
 	unsigned int get_hashed_key(unsigned int hashed_value) const;
