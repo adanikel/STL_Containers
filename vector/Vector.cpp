@@ -9,6 +9,7 @@
 // 1. organize the class
 // 2. elem size and getsize rename
 // 3. const def ext val
+// 4. pop_back where reallocation...
 
 
 template <typename T>
