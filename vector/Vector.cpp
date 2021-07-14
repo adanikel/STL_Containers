@@ -8,6 +8,7 @@
 // todo: 
 // 1. organize the class
 // 2. elem size and getsize rename
+// 3. const def ext val
 
 
 template <typename T>
@@ -15,7 +16,7 @@ class Vec
 {
 private:
 	unsigned int _space; // available space
-	unsigned int _DEF_EXT_VAL = 2;
+	const unsigned int _DEF_EXT_VAL = 2;
 
 public:
 	unsigned int sz; // size of array
