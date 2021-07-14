@@ -9,13 +9,13 @@ An implementation similar to the STL vector container. This implementation is bu
 
 #### Properties
 * Access - O(1) assuming the element location is known.
-* Insertion - O(1) using `push_back()` unless re-allocation is required in which case it would be up to O(n). <br> Using `insert()` would be up to O(n).</br>  Using `set()` method, insertion is always O(1), but the location index should be know and the existing value there will be overwritten.
+* Insertion - O(1) using `push_back()` unless re-allocation is required in which case it would be up to O(n). <br> Using `insert()` would be up to O(n).</br>  Using `set()` method, insertion is always O(1), but the location index should be known and the existing value there will be overwritten.
 * Deletion - Up to O(n) using the `erase()` or `pop_back()` method. 
 
 Notes
 1. `pop_back()` method simply reallocates a new array of the same size and copies all elements to that array, without the last element. Not very efficient.
 2. Access element location using `at()`, `get()` or `set()` would throw an exception if no element exists there.
-3. Accessing elemt location using `[]` does not check whether the index location is correct and therefore leads to possibly undesired bevahiour but is faster performance-wise than `get() set() at()` methods.  <br>The following line in `main()` illustrates defining an array index that is above the vector size: `var[8] = 8` </br>
+3. Accessing element location using `[]` does not check whether the index location is correct and therefore leads to possibly undesired bevahiour but is faster performance-wise than `get() set() at()` methods.  <br>The following line in `main()` illustrates defining an array index that is above the vector size: `var[8] = 8` </br>
 4. Reallocation to new array (for example in `pop_back()` uses `std::move`() instead of `std::copy()` to move all elements to the new array
 
 ## Queue
