@@ -40,29 +40,6 @@ public:
 	
 };
 
-int main_2() // todo remove _2
-{
-	Queue<int> x( 4 );
-	Queue<int> y(std::initializer_list<int>{1, 2, 3, 4, 5}); // construct with initializer list
-	Queue<int> z(y);
-
-	Queue<int> a( Queue<int>(std::initializer_list<int>{4, 5, 6}) );
-	
-	a = y;
-	std::cout << "a = y and a's capcity is: " << a.capacity() << std::endl;
-	std::cout<< "a vs y memory locations " << &a << " " << &y << std::endl;
-	a = Queue<int>(std::initializer_list<int>{8, 7, 6});
-	std::cout << "a = rvalue(new queue) and its capacity is " << a.capacity() << std::endl;
-	std::cout << "is x full VS is y full: " << x.is_full() << " " << y.is_full() << std::endl; // should be 0 1
-	std::cout << "is x empty VS is y empty: " << x.is_empty() << " " << y.is_empty() << std::endl; // should be 1 0	
-	std::cout << "enqueue 2 and 4&& to empty queue x " << std::endl;
-	x.enqueue(2);
-	x.enqueue(2 + 2);
-	std::cout << "dequeue from x: " << x.dequeue() << std::endl;
-	std::cout << "dequeue from x again: " << x.dequeue() << std::endl;
-	return 0;
-}
-
 template <typename T>
 Queue<T>::Queue(unsigned int size)
 	: _size{ size }, _elements{ new T[_size] }
