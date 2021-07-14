@@ -39,7 +39,11 @@ An implementation of a doubly Linked List data type. Basically there's a struct 
 
 ### Properties
 * Insertion and deletion - O(1) using `pop_back() pop_front() push_back() push_front()`
-* Access to elements - O(n) unless iterator location is known.
+* Access to elements - O(n) unless an iterator is given (see notes).
+
+#### Notes
+* Deletion of a Link iterator frees up the current memory allocated by the Link in that iterator (`current`)
+* Accessing is usually O(n) because performing `(itr + n)` where `n` is an integer is undefined behaviour. Iterating forward and backward is possible only by incrementing the iterator (`operator++` or `operator--`). <br> After the correct iterator has been found, you can pass it to the `erase()` method. </br>
 
 ## Map
 
