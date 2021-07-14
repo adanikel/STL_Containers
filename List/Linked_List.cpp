@@ -413,7 +413,19 @@ int main()
 	++itr3;
 
 	var_list3.insert(itr3, 55555);
-
+	
+	std::cout << "printing list3" << std::cout;
+	itr3 = var_list3.begin();
+	while (itr3 != var_list3.end())
+	{
+		std::cout << "\nval is   " << *itr3;
+		++itr3;
+	}
+	
+	std::cout << "pop front and pop back list3" << std::endl;
+	var_list3.pop_front();
+	var_list3.pop_back();
+	std::cout << "printing list3" << std::endl;
 	itr3 = var_list3.begin();
 	while (itr3 != var_list3.end())
 	{
