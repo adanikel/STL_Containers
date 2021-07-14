@@ -5,17 +5,12 @@
 
 // an implementation of vector using dynamic memory and arrays
 
-// todo: 
-// 1. organize the class
-// 4. pop_back where reallocation...
-
-
 template <typename T>
 class Vec
 {
 private:
 	unsigned int _space; // available space
-	const unsigned int _DEF_EXT_VAL{ 2 };
+	const unsigned int _DEF_EXT_VAL{ 2 }; // default value to array memory realocation for extending 
 
 public:
 	unsigned int sz; // size of array
@@ -23,8 +18,8 @@ public:
 
 	Vec(unsigned int inp1); // not explicit intentionally (int and size_t are acceptable)
 	explicit Vec(std::initializer_list<T> lst); // to user 'Vec{a, b, c}'
-	Vec(const Vec& src_vec);
-	Vec(Vec&& rvalue_vec) noexcept;
+	Vec(const Vec& src_vec); // copy constructor
+	Vec(Vec&& rvalue_vec) noexcept; // move constructor
 
 	Vec<T>& operator= (const Vec<T>& obj); // redefining = operator
 	Vec<T>& operator= (Vec<T>&& obj) noexcept; // redefining = operator for rvalue
@@ -37,18 +32,19 @@ public:
 	iterator insert(iterator plc, const T obj); // insert new objects
 	void erase(iterator plc); // erase existing objects
 
-	void set(const unsigned int pos, T obj);
-	T get(int pos);
-
-	void push_back(T obj);
-	void pop_back();
-
-	unsigned int get_size() const { return sz; };
-	unsigned int get_elemsize() const { return sizeof(T); };
-	inline bool empty() { return (sz == 0); };
-	iterator reserve(unsigned int new_space);
-	inline unsigned int capacity() { return _space; };
+	void set(const unsigned int pos, T obj); // checks for out of range error unlike [] operators
+	T get(int pos); // checks for out of range error unlike [] operators
 	T& at(const int pos); // checks for out of range error unlike [] operators
+
+	void push_back(T obj); // append element to top of vector
+	void pop_back();  // remove last element
+
+	unsigned int get_size() const { return sz; }; // get size of vector
+	unsigned int get_elemsize() const { return sizeof(T); }; // get size of element
+	inline bool empty() { return (sz == 0); };
+
+	inline unsigned int capacity() { return _space; }; // get size of underlying element array
+	iterator reserve(unsigned int new_space); // reserve new space for array
 
 	~Vec(); // deallocate memory; another alternative is to use a unique_ptr
 };
@@ -104,11 +100,11 @@ Vec<T>::Vec(const unsigned int inp1)
 {}
 
 template <typename T>
-Vec<T>::Vec(std::initializer_list<T> lst) // initialize as a list
+Vec<T>::Vec(std::initializer_list<T> lst) 
 	: sz{ lst.size() }, _space{ lst.size() * _DEF_EXT_VAL }, elem{ new T[_space] }
 {
 	auto lst_itr = lst.begin();
-	for (unsigned int idx = 0; idx != sz; idx++) // pass initializer list elements to vector
+	for (unsigned int idx = 0; idx != sz; idx++) 
 	{
 		this->elem[idx] = *(lst_itr);
 		lst_itr++;
@@ -116,7 +112,7 @@ Vec<T>::Vec(std::initializer_list<T> lst) // initialize as a list
 }
 
 template <typename T>
-Vec<T>::Vec(const Vec& src_vec) // initialize using another vector - copy it
+Vec<T>::Vec(const Vec& src_vec) 
 	:sz{ src_vec.sz }, _space{ src_vec._space }, elem{ new T[_space] }
 {
 	std::copy(src_vec.elem, src_vec.elem + sz, this->elem);
@@ -188,7 +184,7 @@ Vec<T>& Vec<T>::operator= (const Vec<T>& obj) // copy
 template <typename T>
 Vec<T>& Vec<T>::operator= (Vec<T>&& obj) noexcept
 {
-	delete[] this->elem; // reallocate current memory
+	delete[] this->elem; 
 	this->sz = obj.sz;
 	this->_space = obj._space;
 
