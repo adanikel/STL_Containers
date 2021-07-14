@@ -16,6 +16,7 @@ Notes
 1. `pop_back()` method simply reallocates a new array of the same size and copies all elements to that array, without the last element. Not very efficient.
 2. Access element location using `at()`, `get()` or `set()` would throw an exception if no element exists there.
 3. Accessing elemt location using `[]` does not check whether the index location is correct and therefore leads to possibly undesired bevahiour but is faster performance-wise than `get() set() at()` methods.  <br>The following line in `main()` illustrates defining an array index that is above the vector size: `var[8] = 8` </br>
+4. Reallocation to new array (for example in `pop_back()` uses `std::move`() instead of `std::copy()` to move all elements to the new array
 
 ## Queue
 * Queue - An implementation of a queue, a data structure of a fixed size container where insertion / extraction works in FIFO order.  <br>`enqueue()` inserts an element, `dequeue()` extracts an element. Once the queue is filled (last element of the array has an element), the queue cannot receive any more insertions until the last element has been dequeued and the queue is reset.  </br>
