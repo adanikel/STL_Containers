@@ -414,7 +414,7 @@ int main()
 
 	var_list3.insert(itr3, 55555);
 	
-	std::cout << "printing list3" << std::cout;
+	std::cout << "printing list3" << std::endl;
 	itr3 = var_list3.begin();
 	while (itr3 != var_list3.end())
 	{
