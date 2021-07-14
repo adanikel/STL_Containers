@@ -413,12 +413,14 @@ int main()
 	++itr3;
 
 	var_list3.insert(itr3, 55555);
-	
+	var_list3.insert(itr3, 111);
+	var_list3.insert(itr3, 123);
+
 	std::cout << "printing list3" << std::endl;
 	itr3 = var_list3.begin();
 	while (itr3 != var_list3.end())
 	{
-		std::cout << "\nval is   " << *itr3;
+		std::cout << "val is   " << *itr3 << std::endl;
 		++itr3;
 	}
 	
@@ -429,11 +431,19 @@ int main()
 	itr3 = var_list3.begin();
 	while (itr3 != var_list3.end())
 	{
-		std::cout << "\nval is   " << *itr3;
+		std::cout << "val is   " << *itr3 << std::endl;
 		++itr3;
 	}
+	std::cout << "erasing second element list3" << std::endl;
+	var_list3.erase(var_list3.begin() + 1);
 	
-	
+	std::cout << "printing list3" << std::endl;
+	itr3 = var_list3.begin();
+	while (itr3 != var_list3.end())
+	{
+		std::cout << "val is   " << *itr3 << std::endl;
+		++itr3;
+	}
 
 	return 0;
 }
