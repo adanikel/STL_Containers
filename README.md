@@ -9,7 +9,7 @@ An implementation similar to the STL vector container. This implementation is bu
 
 #### Properties
 * Access - O(1) assuming the element location is known.
-* Insertion - O(1) using `push_bask()` unless re-allocation is required in which case it would be up to O(n). using `insert()` would be up to O(n).
+* Insertion - O(1) using `push_back()` unless re-allocation is required in which case it would be up to O(n). using `insert()` would be up to O(n). Using `set()` method, insertion is always O(1), but the location index should be know and the existing value there will be overwritten.
 * Deletion - Up to O(n) using the `erase()` or `pop_back()` method. 
 
 Notes
