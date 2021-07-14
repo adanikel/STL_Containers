@@ -7,6 +7,7 @@
 
 // todo: 
 // 1. organize the class
+// 2. elem size and getsize rename
 
 
 template <typename T>
