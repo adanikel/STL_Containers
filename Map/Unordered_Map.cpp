@@ -4,10 +4,10 @@
 // unordered_map implementation, which an array of buckets where each bucket is a std::list containing std::pairs
 
 template <typename T, typename R>
-class UnorderedMapIMP
+class UnorderedMap
 {
 
-	unsigned int default_buckets_sz{ 100 };
+	unsigned int _DEF_BUCKETS_SZ{ 100 };
 	unsigned int buckets_sz;
 	unsigned int get_hashed_value(const T key) const;
 	unsigned int get_hashed_key(unsigned int hashed_value) const;
@@ -17,13 +17,13 @@ class UnorderedMapIMP
 public:
 	std::list<std::pair<T, R>>* element_lists; // create SZ lists
 
-	UnorderedMapIMP(); // default bucket num
-	UnorderedMapIMP(unsigned int sz); // todo: make const
-	UnorderedMapIMP(const UnorderedMapIMP<T, R>& map_obj); // copy constructor
-	UnorderedMapIMP(UnorderedMapIMP<T, R>&& map_obj); // move constructor
+	UnorderedMap(); // default bucket num
+	UnorderedMap(unsigned int sz); // todo: make const
+	UnorderedMap(const UnorderedMap<T, R>& map_obj); // copy constructor
+	UnorderedMap(UnorderedMap<T, R>&& map_obj); // move constructor
 
-	UnorderedMapIMP<T, R>& operator=(const UnorderedMapIMP<T, R>& map_obj); // copy assignment
-	UnorderedMapIMP<T, R>& operator=(UnorderedMapIMP<T, R>&& map_obj); // move assignment
+	UnorderedMap<T, R>& operator=(const UnorderedMap<T, R>& map_obj); // copy assignment
+	UnorderedMap<T, R>& operator=(UnorderedMap<T, R>&& map_obj); // move assignment
 
 	void insert_element(const T key, const R value);
 	void delete_element(const T key);
@@ -34,21 +34,21 @@ public:
 	unsigned int max_size() const;
 
 	void clear();
-	void swap(UnorderedMapIMP<T, R>& map_obj);
+	void swap(UnorderedMap<T, R>& map_obj);
 	unsigned int bucket_size(unsigned int bucket_idx) const; // size of bucket
 
 	R& at(T key);
 	R& operator[](T key);
 
-	~UnorderedMapIMP();
+	~UnorderedMap();
 
 };
 
 int main()
 {
-	std::string some_key{ "wassup hombre" };
-	std::string non_existing_key{ "wassup hombre2" };
-	UnorderedMapIMP<std::string, int> string_map(5);
+	std::string some_key{ "some_key_1" };
+	std::string non_existing_key{ "some_key_2" };
+	UnorderedMap<std::string, int> string_map(5);
 
 	string_map.insert_element(some_key, 10);
 
@@ -61,7 +61,7 @@ int main()
 	string_map.delete_element(some_key);
 	std::cout << "\n" << string_map[some_key];
 	string_map[some_key] = 999;
-	UnorderedMapIMP<std::string, int> string_map2(string_map);
+	UnorderedMap<std::string, int> string_map2(string_map);
 	std::cout << "\ncopied const" << string_map2[some_key];
 	string_map[some_key] = 888;
 	string_map2 = string_map;
@@ -80,17 +80,17 @@ int main()
 }
 
 template <typename T, typename R>
-UnorderedMapIMP<T, R>::UnorderedMapIMP()
-	: buckets_sz{ default_buckets_sz }, element_lists{ new std::list<std::pair<T, R>>[buckets_sz] }
+UnorderedMap<T, R>::UnorderedMap()
+	: buckets_sz{ _DEF_BUCKETS_SZ }, element_lists{ new std::list<std::pair<T, R>>[buckets_sz] }
 {}
 
 template <typename T, typename R>
-UnorderedMapIMP<T, R>::UnorderedMapIMP(unsigned int sz)
+UnorderedMap<T, R>::UnorderedMap(unsigned int sz)
 	: buckets_sz{ sz }, element_lists{ new std::list<std::pair<T, R>>[buckets_sz] }
 {}
 
 template <typename T, typename R>
-UnorderedMapIMP<T, R>::UnorderedMapIMP(const UnorderedMapIMP<T, R>& map_obj)
+UnorderedMap<T, R>::UnorderedMap(const UnorderedMap<T, R>& map_obj)
 	: buckets_sz{ map_obj.buckets_sz }, element_lists{ new std::list<std::pair<T, R>>[buckets_sz] }  // copy buckets_sz
 {
 	unsigned int bucket_idx{ 0 };
@@ -103,7 +103,7 @@ UnorderedMapIMP<T, R>::UnorderedMapIMP(const UnorderedMapIMP<T, R>& map_obj)
 }
 
 template <typename T, typename R>
-UnorderedMapIMP<T, R>::UnorderedMapIMP(UnorderedMapIMP<T, R>&& map_obj)
+UnorderedMap<T, R>::UnorderedMap(UnorderedMap<T, R>&& map_obj)
 	: buckets_sz{ std::move(map_obj.buckets_sz) }, element_lists{ new std::list<std::pair<T, R>>[buckets_sz] }
 {
 	unsigned int bucket_idx{ 0 };
@@ -116,12 +116,10 @@ UnorderedMapIMP<T, R>::UnorderedMapIMP(UnorderedMapIMP<T, R>&& map_obj)
 }
 
 template <typename T, typename R>
-UnorderedMapIMP<T, R>& UnorderedMapIMP<T, R>::operator=(const UnorderedMapIMP<T, R>& map_obj)
+UnorderedMap<T, R>& UnorderedMap<T, R>::operator=(const UnorderedMap<T, R>& map_obj)
 {
-	this->clear(); // delete old ones
 	this->buckets_sz = map_obj.buckets_sz;
-
-	this->element_lists = new std::list<std::pair<T, R>>[buckets_sz];
+	this->clear();
 
 	unsigned int bucket_idx{ 0 };
 	while (bucket_idx < buckets_sz)
@@ -134,12 +132,10 @@ UnorderedMapIMP<T, R>& UnorderedMapIMP<T, R>::operator=(const UnorderedMapIMP<T,
 }
 
 template <typename T, typename R>
-UnorderedMapIMP<T, R>& UnorderedMapIMP<T, R>::operator=(UnorderedMapIMP<T, R>&& map_obj)
+UnorderedMap<T, R>& UnorderedMap<T, R>::operator=(UnorderedMap<T, R>&& map_obj)
 {
-	this->clear(); // delete old ones
 	this->buckets_sz = std::move(map_obj.buckets_sz);
-
-	this->element_lists = new std::list<std::pair<T, R>>[buckets_sz];
+	this->clear();
 
 	unsigned int bucket_idx{ 0 };
 	while (bucket_idx < buckets_sz)
@@ -152,19 +148,19 @@ UnorderedMapIMP<T, R>& UnorderedMapIMP<T, R>::operator=(UnorderedMapIMP<T, R>&& 
 }
 
 template <typename T, typename R>
-unsigned int UnorderedMapIMP<T, R>::get_hashed_value(const T key) const // hashes key into unsigned int
+unsigned int UnorderedMap<T, R>::get_hashed_value(const T key) const // hashes key into unsigned int
 {
 	return std::hash<T>{}(key);
 }
 
 template <typename T, typename R>
-unsigned int UnorderedMapIMP<T, R>::get_hashed_key(unsigned int hashed_value) const // converts hashed unsigned int into index
+unsigned int UnorderedMap<T, R>::get_hashed_key(unsigned int hashed_value) const // converts hashed unsigned int into index
 {
 	return hashed_value % this->buckets_sz;
 }
 
 template <typename T, typename R>
-R* UnorderedMapIMP<T, R>::search_within_specific_list(unsigned int list_idx, const T key)
+R* UnorderedMap<T, R>::search_within_specific_list(unsigned int list_idx, const T key)
 {
 	R* value = nullptr;
 	typename std::list<std::pair<T, R>>::iterator itr = this->element_lists[list_idx].begin();
@@ -183,7 +179,7 @@ R* UnorderedMapIMP<T, R>::search_within_specific_list(unsigned int list_idx, con
 }
 
 template <typename T, typename R>
-R& UnorderedMapIMP<T, R>::at(const T key)
+R& UnorderedMap<T, R>::at(const T key)
 {
 	unsigned int hashed = this->get_hashed_value(key);
 	unsigned int list_idx = this->get_hashed_key(hashed);
@@ -200,7 +196,7 @@ R& UnorderedMapIMP<T, R>::at(const T key)
 }
 
 template <typename T, typename R>
-R& UnorderedMapIMP<T, R>::operator[](const T key)
+R& UnorderedMap<T, R>::operator[](const T key)
 {
 	unsigned int hashed = this->get_hashed_value(key);
 	unsigned int list_idx = this->get_hashed_key(hashed);
@@ -218,7 +214,7 @@ R& UnorderedMapIMP<T, R>::operator[](const T key)
 
 
 template <typename T, typename R>
-void UnorderedMapIMP<T, R>::insert_element(const T key, const R value)
+void UnorderedMap<T, R>::insert_element(const T key, const R value)
 {
 	unsigned int hashed = this->get_hashed_value(key);
 	unsigned int list_idx = this->get_hashed_key(hashed);
@@ -230,7 +226,7 @@ void UnorderedMapIMP<T, R>::insert_element(const T key, const R value)
 }
 
 template <typename T, typename R>
-void UnorderedMapIMP<T, R>::delete_element(const T key)
+void UnorderedMap<T, R>::delete_element(const T key)
 {
 	unsigned int hashed = this->get_hashed_value(key);
 	unsigned int list_idx = this->get_hashed_key(hashed);
@@ -249,7 +245,7 @@ void UnorderedMapIMP<T, R>::delete_element(const T key)
 }
 
 template <typename T, typename R>
-bool UnorderedMapIMP<T, R>::contains(const T key)
+bool UnorderedMap<T, R>::contains(const T key)
 {
 	unsigned int hashed = this->get_hashed_value(key);
 	unsigned int list_idx = this->get_hashed_key(hashed);
@@ -260,7 +256,7 @@ bool UnorderedMapIMP<T, R>::contains(const T key)
 }
 
 template <typename T, typename R>
-unsigned int UnorderedMapIMP<T, R>::size() const
+unsigned int UnorderedMap<T, R>::size() const
 {
 
 	unsigned int size{ 0 };
@@ -275,7 +271,7 @@ unsigned int UnorderedMapIMP<T, R>::size() const
 }
 
 template <typename T, typename R>
-unsigned int  UnorderedMapIMP<T, R>::max_size() const
+unsigned int  UnorderedMap<T, R>::max_size() const
 {
 	unsigned int max_size{ 0 };
 	unsigned int bucket_idx{ 0 };
@@ -290,7 +286,7 @@ unsigned int  UnorderedMapIMP<T, R>::max_size() const
 
 
 template <typename T, typename R>
-bool UnorderedMapIMP<T, R>::empty() const
+bool UnorderedMap<T, R>::empty() const
 {
 	unsigned int bucket_idx{ 0 };
 	while (bucket_idx < buckets_sz)
@@ -305,28 +301,28 @@ bool UnorderedMapIMP<T, R>::empty() const
 }
 
 template <typename T, typename R>
-void UnorderedMapIMP<T, R>::clear()
+void UnorderedMap<T, R>::clear()
 {
-	this->buckets_sz = 0;
 	delete[] this->element_lists;
+	this->element_lists = new std::list<std::pair<T, R>>[buckets_sz];
 }
 
 template <typename T, typename R>
-void UnorderedMapIMP<T, R>::swap(UnorderedMapIMP<T, R>& map_obj)
+void UnorderedMap<T, R>::swap(UnorderedMap<T, R>& map_obj)
 {
 	std::swap(this->element_lists, map_obj.element_lists);
 	std::swap(this->buckets_sz, map_obj.buckets_sz);
 }
 
 template <typename T, typename R>
-unsigned int UnorderedMapIMP<T, R>::bucket_size(unsigned int bucket_idx) const
+unsigned int UnorderedMap<T, R>::bucket_size(unsigned int bucket_idx) const
 {
 	return this->element_lists[bucket_idx].size();
 }
 
 
 template <typename T, typename R>
-UnorderedMapIMP<T, R>::~UnorderedMapIMP<T, R>()
+UnorderedMap<T, R>::~UnorderedMap<T, R>()
 {
-	this->clear();
+	delete[] this->element_lists;
 }
