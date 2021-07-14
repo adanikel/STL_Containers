@@ -14,7 +14,8 @@ An implementation similar to the STL vector container. This implementation is bu
 
 Notes
 1. `pop_back()` method simply reallocates a new array of the same size and copies all elements to that array, without the last element. Not very efficient.
-2. Access element location using `at()` would throw an exception if no element exists there, unlike `operator[]` which might lead to undefiend behaviour but is faster.
+2. Access element location using `at()`, `get()` or `set()` would throw an exception if no element exists there.
+3. Accessing elemt location using `[]` does not check whether the index location is correct and therefore leads to possibly undesired bevahiour but is faster performance-wise than `get() set() at()` methods. The following line in `main()` illustrates defining an array index that is above the vector size: `var[8] = 8`
 
 ## Queue
 * Queue - An implementation of a queue, a data structure of a fixed size container where insertion / extraction works in FIFO order. `enqueue()` inserts an element, `dequeue()` extracts an element. Once the queue is filled (last element of the array has an element), the queue cannot receive any more insertions until the last element has been dequeued and the queue is reset.
