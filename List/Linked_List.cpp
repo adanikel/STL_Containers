@@ -69,6 +69,8 @@ public:
 		bool operator!=(const iterator& obj) const;
 
 		iterator* operator->();
+	
+		~iterator();
 
 	};
 
@@ -379,6 +381,10 @@ typename List<T>::iterator* List<T>::iterator::operator->()
 {
 	return this;
 }
+
+template <typename T>
+List<T>::iterator::~iterator()
+{}
 
 int main()
 {
