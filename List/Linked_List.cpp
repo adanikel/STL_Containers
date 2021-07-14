@@ -4,6 +4,7 @@
 
 // todo
 // 1. add pop_back() and pop_front()
+// 2. add erase()
 
 template <typename T>
 struct Link
