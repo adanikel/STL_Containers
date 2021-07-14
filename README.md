@@ -34,17 +34,24 @@ Notes
 
 ## List
 
-An implementation of a doubly Linked List data type. Basically there's a struct `Link` that hold pointers to the previous and next links, with both are also of type `Link`. 
+An implementation of a doubly Linked List data structure. Basically there's a struct `Link` that hold pointers to the previous and next links, with both are also of type `Link`. 
 <br>Each link holds some value, and `List` type basically holds a list of many `Link` objects and allows insertion, deletion and iteration over them.</br>
 
-### Properties
-* Insertion and deletion - O(1) using `pop_back() pop_front() push_back() push_front()`
+#### Properties
+* Insertion and deletion - O(1) using `pop_back() pop_front() push_back() push_front()`.
 * Access to elements - O(n) unless an iterator is given (see notes).
 
 #### Notes
-* Deletion of a Link iterator frees up the current memory allocated by the Link in that iterator (`current`)
-* Accessing is usually O(n) because performing `(itr + n)` where `n` is an integer is undefined behaviour. Iterating forward and backward is possible only by incrementing the iterator (`operator++` or `operator--`). <br> After the correct iterator has been found, you can pass it to the `erase()` method. </br>
+1. Deletion of a Link iterator frees up the current memory allocated by the Link in that iterator (`current`)
+2. Accessing is usually O(n) because performing `(itr + n)` where `n` is an integer is undefined behaviour. Iterating forward and backward is possible only by incrementing the iterator (`operator++` or `operator--`). <br> After the correct iterator has been found, you can pass it to the `erase()` method. </br>
 
 ## Map
+An implementation of an Unorderd Map data structure. Elements are accesses by keys, which then undergo a hash operation that transforms the key into an integer value that goes through a modulus operation with the amount of buckets size (more on that later). <br>Basically, there's an array of Linked Lists (each list is called a bucket). The aforementioned integer result from the hashing and modulus operation, defines which bucket (array element index) from the array will be used to store the value.<br>The reason to use an array of buckets rather than an array of the values directly, is because some keys may produce the same hash and modulus result, and therefore collide. By using a list as a bucket, we can store several values in the same list, under the same hash result.<br>What this means, in order words, is that in order to access a key, we first need to find the correct list inside the array, and then the correct link (`std::pair` - see notes) inside the list.
+
+#### Properties
+* All operations, insertion deletion and access, are usually O(1) but theoretically can be up to O(n).
+
+#### Notes
+1. The buckets (lists) store `std::pair`-type links, where the `pair->first` is the original key, and `pair->second` is the stored value. This is needed in order to find the right value for buckets that have several values.
 
 ## Pair
