@@ -34,6 +34,13 @@ Notes
 
 ## List
 
+An implementation of a doubly Linked List data type. Basically there's a struct `Link` that hold pointers to the previous and next links, with both are also of type `Link`. 
+<br>Each link holds some value, and `List` type basically holds a list of many `Link` objects and allows insertion, deletion and iteration over them.</br>
+
+### Properties
+* Insertion and deletion - O(1) using `pop_back() pop_front() push_back() push_front()`
+* Access to elements - O(n) unless iterator location is known.
+
 ## Map
 
 ## Pair
