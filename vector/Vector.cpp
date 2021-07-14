@@ -35,7 +35,7 @@ public:
 	iterator begin() { return &(elem[0]); } // pointer to first element
 	iterator end() { return &elem[sz]; } // pointer to last element
 	iterator insert(iterator plc, const T obj); // insert new objects
-	iterator erase(iterator plc); // erase existing objects
+	void erase(iterator plc); // erase existing objects
 
 	void set(const unsigned int pos, T obj);
 	T get(int pos);
@@ -55,17 +55,14 @@ public:
 
 int main()
 {
-	Vec<int> var(3);
+	Vec<int> var(5);
 	var.set(0, 0);
 
 	var[1] = 1;
 	var[2] = 2;
 	var[3] = 3;
 	var[4] = 4;
-	var[5] = 5;
-	var[6] = 6;
-	var[7] = 7;
-	var[8] = 8;
+	var[8] = 8; // works but illustrates how this should not be done... undefined behaviour! use set()
 
 	Vec<int>::iterator itr;
 	itr = var.begin();
@@ -83,8 +80,9 @@ int main()
 	{
 		std::cout << var[idx] << std::endl;
 	};
-	std::cout << "now erase" << std::endl;
+	std::cout << "now erase first and last (last using erase)" << std::endl;
 	var.erase(itr);
+	var.erase(var.end() - 1);
 	for (unsigned int idx = 0; idx != var.sz; idx++)
 	{
 		std::cout << var[idx] << std::endl;
@@ -135,16 +133,20 @@ Vec<T>::Vec(Vec<T>&& rvalue_vec) noexcept
 }
 
 template <typename T>
-typename Vec<T>::iterator Vec<T>::erase(Vec<T>::iterator plc)
+void Vec<T>::erase(Vec<T>::iterator plc)
 {
-	for (iterator temp = plc; temp != this->end() - 1; temp++)
+	if (plc == this->end() - 1)
 	{
-		*temp = *(temp + 1);
-	};
-
+		this->pop_back();
+	}
+	else
+	{
+		for (iterator temp = plc; temp != this->end() - 1; temp++)
+		{
+			*temp = *(temp + 1);
+		};
 	--this->sz;
-
-	return plc;
+	}
 }
 
 template <typename T>
