@@ -17,7 +17,7 @@ class Vec
 {
 private:
 	unsigned int _space; // available space
-	const unsigned int _DEF_EXT_VAL = 2;
+	const unsigned int _DEF_EXT_VAL{ 2 };
 
 public:
 	unsigned int sz; // size of array
@@ -41,10 +41,12 @@ public:
 
 	void set(const unsigned int pos, T obj);
 	T get(int pos);
+
 	void push_back(T obj);
-	unsigned int getsize() const { return sz; };
+	void pop_back();
+
+	unsigned int get_size() const { return sz; };
 	unsigned int get_elemsize() const { return sizeof(T); };
-	void resize(unsigned int new_sz);
 	inline bool empty() { return (sz == 0); };
 	iterator reserve(unsigned int new_space);
 	inline unsigned int capacity() { return _space; };
@@ -58,7 +60,6 @@ int main()
 	Vec<int> var(3);
 	var.set(0, 0);
 
-	var.resize(9);
 	var[1] = 1;
 	var[2] = 2;
 	var[3] = 3;
@@ -71,14 +72,15 @@ int main()
 	Vec<int>::iterator itr;
 	itr = var.begin();
 	std::cout << "will insert soon" << std::endl;
-	std::cout << "old size is " << var.getsize() << std::endl;
+	std::cout << "old size is " << var.get_size() << std::endl;
 
 	for (unsigned int idx = 0; idx != var.sz; idx++)	
 	{	
 		std::cout << var[idx] << std::endl;
 	};
 	var.insert(itr + 1, 999);
-	std::cout << "inserted 999 as first index" << std::endl;
+	var.pop_back();
+	std::cout << "inserted 999 as first index and popped back" << std::endl;
 	for (unsigned int idx = 0; idx != var.sz; idx++)
 	{
 		std::cout << var[idx] << std::endl;
@@ -89,7 +91,7 @@ int main()
 	{
 		std::cout << var[idx] << std::endl;
 	};
-	std::cout << "new size is " << var.getsize() << std::endl;
+	std::cout << "new size is " << var.get_size() << std::endl;
 	std::cout << "reserving new space... old capacity is " << var.capacity() << std::endl;
 	var.reserve(2 * var.capacity());
 	std::cout << "reserved, new capacity is " << var.capacity() << std::endl;
@@ -102,7 +104,7 @@ int main()
 
 template <typename T>
 Vec<T>::Vec(const unsigned int inp1)
-	:sz{ inp1 }, _space{ inp1 * _DEF_EXT_VAL }, elem{ new T[_space] }
+	:sz{ inp1 }, _space{ inp1 * 2 }, elem{ new T[_space] }
 {}
 
 template <typename T>
@@ -154,7 +156,7 @@ typename Vec<T>::iterator Vec<T>::insert(Vec<T>::iterator plc, const T obj)
 	if (!(this->sz + 1 < this->_space)) this->reserve(sz * this->_DEF_EXT_VAL);
 	plc = this->begin() + loc;
 
-	for (iterator temp = this->end() - 1; temp != plc; temp--) 
+	for (iterator temp = this->end(); temp != plc; temp--) 
 	{
 		*temp = *(temp - 1);
 	};
@@ -243,29 +245,13 @@ void Vec<T>::push_back(const T obj)
 }
 
 template <typename T>
-void Vec<T>::resize(unsigned int new_sz)
+void Vec<T>::pop_back()
 {
-	unsigned int diff = this->sz - new_sz;
-
-	if (new_sz <= this->sz) // delete excess
-	{
-
-		for (unsigned int idx = new_sz; idx != this->sz; idx++)
-		{
-			this->elem[idx] = 0;
-
-		}
-
-	}
-	else if (new_sz > this->sz) // push_back new ones and update size
-	{
-		for (unsigned int idx = this->sz; idx != new_sz; idx++)
-		{
-			this->push_back(0);
-		}
-	}
-	this->sz = new_sz;
-
+	T* new_array = new T[this->_space];
+	std::copy(this->elem, this->elem + sz - 1, new_array);
+	delete[] this->elem;
+	this->elem = new_array;
+	--this->sz;
 }
 
 template <typename T>
