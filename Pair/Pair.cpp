@@ -14,11 +14,15 @@ struct Pair
 	Pair<FT, ST>& operator=(Pair<FT, ST>&& pair_obj); // move assignment
 
 	void swap(Pair<FT, ST>& pair_obj);
+	
+	~Pair();
 };
 
 
 int main()
 {
+	Pair<int, int> x(2, 3);
+	std::cout << "first " << x.first << " second " << x.second << std::endl;
 
 	return 0;
 }
@@ -63,3 +67,6 @@ void Pair<FT, ST>::swap(Pair<FT, ST>& pair_obj)
 	std::swap(this->second, pair_obj.second);
 }
 
+template <typename FT, typename ST>
+Pair<FT, ST>::~Pair()
+{}
