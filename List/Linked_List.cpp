@@ -320,15 +320,15 @@ void List<T>::insert(List<T>::iterator& itr_pos, const T value)
 template <typename T>
 void List<T>::erase(List<T>::iterator& itr_pos)
 {
-	if (itr_pos == this->first) this->pop_front;
-	else if (itr_pos == this->last) this->pop_back;
+	if (itr_pos == this->first) this->pop_front();
+	else if (itr_pos == this->last) this->pop_back();
 	else
 	{
-	(itr_pos->prev)->next = itr_pos->next;
-	(itr_pos->next)->prev = itr_pos->prev;
+		(itr_pos->current->prev)->next = itr_pos->current->next;
+		(itr_pos->current->next)->prev = itr_pos->current->prev;
 
-	delete itr_pos;
-	--this->size;
+		delete itr_pos->current;
+		--this->size;
 	}
 }
 
