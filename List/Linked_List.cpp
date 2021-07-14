@@ -2,6 +2,9 @@
 
 // Linked list
 
+// todo
+// 1. add pop_back() and pop_front()
+
 template <typename T>
 struct Link
 {
