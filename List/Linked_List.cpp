@@ -3,8 +3,10 @@
 // Linked list
 
 
-// todo pop if one elemen just clear
+// todo pop if one element just clear
 // todo incr and decr size in pops
+// todo make sure current link is correct
+
 template <typename T>
 struct Link
 {
@@ -195,7 +197,7 @@ void List<T>::push_back(T obj)
 
 	this->last = temp;
 	if (!this->first) this->first = temp;
-	this->size++;
+	++this->size;
 
 }
 
@@ -212,23 +214,39 @@ void List<T>::push_front(T obj)
 
 	this->first = temp;
 	if (!this->last) this->last = temp;
-	this->size++;
+	++this->size;
 }
 
 template <typename T>
 void List<T>::pop_back()
 {
-	Link<T>* new_last = last->prev;
-	new_last->next = nullptr;
+	if (this->size <= 1) this->clear();
+	else
+	{
+		Link<T>* new_last = last->prev;
+		new_last->next = nullptr;
 
-	delete this->last;
-	this->last = new_last;
-}
+		delete this->last;
+		this->last = new_last;
+		
+		--this->size;
+	}
+}	
 
 template <typename T>
 void List<T>::pop_front()
 {
-	Link<T> new_first = first->next;	
+	if (this->size <= 1) this->clear();
+	else
+	{
+		Link<T>* new_first = first->next;
+		new_first->prev = nullptr;
+		
+		delete this->first;
+		this->first = new_first;
+
+		--this->size;	
+	}
 }
 
 template <typename T>
@@ -297,6 +315,21 @@ void List<T>::insert(List<T>::iterator& itr_pos, const T value)
 	itr_pos->current->prev = new_link;
 
 	this->size++;
+}
+
+template <typename T>
+void List<T>::erase(List<T>::iterator& itr_pos)
+{
+	if (itr_pos == this->first) this->pop_front;
+	else if (itr_pos == this->last) this->pop_back;
+	else
+	{
+	(itr_pos->prev)->next = itr_pos->next;
+	(itr_pos->next)->prev = itr_pos->prev;
+
+	delete itr_pos;
+	--this->size;
+	}
 }
 
 
@@ -384,9 +417,11 @@ int main()
 	itr3 = var_list3.begin();
 	while (itr3 != var_list3.end())
 	{
-		std::cout << "\n" << *itr3;
+		std::cout << "\nval is   " << *itr3;
 		++itr3;
 	}
+	
+	
 
 	return 0;
 }
