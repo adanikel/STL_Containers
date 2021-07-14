@@ -2,6 +2,9 @@
 
 // Linked list
 
+
+// todo pop if one elemen just clear
+// todo incr and decr size in pops
 template <typename T>
 struct Link
 {
@@ -40,6 +43,8 @@ public:
 
 	void push_back(T obj);
 	void push_front(T obj);
+	void pop_back();
+	void pop_front();
 
 	inline bool empty() const;
 
@@ -66,6 +71,7 @@ public:
 	};
 
 	void insert(iterator& itr_pos, const T value);
+	void erase(iterator& itr_pos);
 
 	iterator begin() const; // returns first
 	iterator end() const; // returns nullptr
@@ -207,6 +213,22 @@ void List<T>::push_front(T obj)
 	this->first = temp;
 	if (!this->last) this->last = temp;
 	this->size++;
+}
+
+template <typename T>
+void List<T>::pop_back()
+{
+	Link<T>* new_last = last->prev;
+	new_last->next = nullptr;
+
+	delete this->last;
+	this->last = new_last;
+}
+
+template <typename T>
+void List<T>::pop_front()
+{
+	Link<T> new_first = first->next;	
 }
 
 template <typename T>
