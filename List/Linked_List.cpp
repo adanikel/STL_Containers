@@ -435,7 +435,7 @@ int main()
 		++itr3;
 	}
 	std::cout << "erasing second element list3" << std::endl;
-	var_list3.erase(var_list3.begin() + 1);
+	var_list3.erase(++var_list3.begin());
 	
 	std::cout << "printing list3" << std::endl;
 	itr3 = var_list3.begin();
