@@ -116,7 +116,6 @@ Vec<T>::Vec(const Vec& src_vec)
 	:sz{ src_vec.sz }, _space{ src_vec._space }, elem{ new T[_space] }
 {
 	std::copy(src_vec.elem, src_vec.elem + sz, this->elem);
-
 }
 
 template <typename T>
@@ -244,7 +243,7 @@ template <typename T>
 void Vec<T>::pop_back()
 {
 	T* new_array = new T[this->_space];
-	std::copy(this->elem, this->elem + sz - 1, new_array);
+	std::move(this->elem, this->elem + sz - 1, new_array);
 	delete[] this->elem;
 	this->elem = new_array;
 	--this->sz;
@@ -254,7 +253,7 @@ template <typename T>
 typename Vec<T>::iterator Vec<T>::reserve(unsigned int new_space)
 {
 	T* new_elem = new T[new_space];
-	std::copy(elem, elem + sz, new_elem);
+	std::move(elem, elem + sz, new_elem);
 	delete[] elem;
 	this->elem = new_elem;
 
