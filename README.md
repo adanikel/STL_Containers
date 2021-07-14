@@ -1,6 +1,6 @@
 # STL_Containers
 
-Implementations for some standard library containers and some other data structures
+Implementations for some standard library containers and some other data structures. Every implementation contains a `main()` functions that performs some basic tests. <br> The `Queue` data has all its tests inside the `CircularQueue` class, because it derives from `Queue` and therefore all tests can be performed in one place. <br> All implementations have `copy / move` constructors and assignment operators defined.
 
 
 ## Vector
@@ -55,3 +55,10 @@ An implementation of an Unorderd Map data structure. Elements are accesses by ke
 1. The buckets (lists) store `std::pair`-type links, where the `pair->first` is the original key, and `pair->second` is the stored value. This is needed in order to find the right value for buckets that have several values.
 
 ## Pair
+An implementation of the Pair data structure container. Basically, a single class that has `this->first` and `this->second` members. This is mostly used in order to store values with some other values together. One example for the usage of `std::pair` can be seen in the `Unordered Map` implementation.
+
+#### Properties
+* Insertion, deletion and access are always O(1).
+
+#### Notes
+1. No dynamic memory allocation is used in this implementation.
