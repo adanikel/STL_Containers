@@ -54,6 +54,17 @@ An implementation of an Unorderd Map data structure. Elements are accesses by ke
 #### Notes
 1. The buckets (lists) store `std::pair`-type links, where the `pair->first` is the original key, and `pair->second` is the stored value. This is needed in order to find the right value for buckets that have several values.
 
+## Stack
+An implementation of a Stack data structure container. A container that has an underlying array, and allows insertion / deletion of the top element in the array only.
+
+#### Properties
+* Access is FIFO - first in first out
+* Insertion, deletion are always O(1) - see notes
+
+#### Notes
+1. `pop()` method simply decrements the pointer of the top element, but that element does not get removed. <br> it was considered at first to reallocate the array without the top element.
+2. Using `pop()` on an empty Stack or `push()` on a full stack would throw an exception.
+
 ## Pair
 An implementation of the Pair data structure container. Basically, a single class that has `this->first` and `this->second` members. This is mostly used in order to store values with some other values together. One example for the usage of `std::pair` can be seen in the `Unordered Map` implementation.
 
