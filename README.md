@@ -58,7 +58,7 @@ An implementation of an Unorderd Map data structure. Elements are accesses by ke
 An implementation of a Stack data structure container. A container that has an underlying array, and allows insertion / deletion of the top element in the array only.
 
 #### Properties
-* Access is FIFO - first in first out
+* Access is LIFO - last in first out
 * Insertion, deletion are always O(1) - see notes
 
 #### Notes
