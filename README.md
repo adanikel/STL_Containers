@@ -55,12 +55,16 @@ An implementation of an Unorderd Map data structure. Elements are accesses by ke
 1. The buckets (lists) store `std::pair`-type links, where the `pair->first` is the original key, and `pair->second` is the stored value. This is needed in order to find the right value for buckets that have several values.
 
 ## Heap
-An implementation of the Heap data structure. The elements of the container are stored inside a hidden array `_elem_arr`. The array is then sorted (`sort_heap()`) in such a way that represents a heap.<br>In a heap container, the elements are stored in nodes, where each node has a parent node (except for the top node) and either 0, 1 or 2 child nodes. The nodes are sorted in such a way, where they have to follow some rules with their parent node, but not necessarily with the left / right nodes.<br>For example, the "MaxHeap" is a type of heap where each node, has a bigger parent node.
+An implementation of the Heap data structure. The elements of the container are stored inside a hidden array `_elem_arr`. The array is then sorted (`sort_heap()`) in such a way that represents a heap.<br>In a heap container, the elements are stored in nodes, where each node has a parent node (except for the top node) and either 0, 1 or 2 child nodes. The nodes are sorted in such a way (see note 2), where they have to follow some rules with their parent node, but not necessarily with the left / right nodes. For example, the "MaxHeap" is a type of heap where each node, has a bigger parent node.
+<br><br>For element at index `i`, the corresponding parent/child nodes would be located as followed:<br>├ Parent - `floor((i-1)/2)`<br>├ Left Child - `2*i + 1`<br>├ Right Child - `2*i + 2`
 
 #### Properties
-
+* Insertion is basically O(1) because the value is inserted as the last underlying array element, but the process of heapifying (even after insertion) is O(nlog n)
 
 #### Notes
+1. Level-order-traversal is used to iteratore over the nodes in this implementation
+2. In order to define the sorting algorithm, you need to pass a function pointer into the constructor that accepts (node index, parent_node index) as params and returns a bool value.<br>You can see the usage of `is_bigger()` as an example in the `main()` method.
+3. The `has_*` methods, which are used to find out whether a node has parent/child nodes, return `-1` if no such nodes exist.
 
 ## Stack
 An implementation of a Stack data structure container. A container that has an underlying array, and allows insertion / deletion of the top element in the array only.
