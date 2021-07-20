@@ -55,8 +55,10 @@ An implementation of an Unorderd Map data structure. Elements are accesses by ke
 1. The buckets (lists) store `std::pair`-type links, where the `pair->first` is the original key, and `pair->second` is the stored value. This is needed in order to find the right value for buckets that have several values.
 
 ## Heap
+An implementation of the Heap data structure. The elements of the container are stored inside a hidden array `_elem_arr`. The array is then sorted (`sort_heap()`) in such a way that represents a heap.<br>In a heap container, the elements are stored in nodes, where each node has a parent node (except for the top node) and either 0, 1 or 2 child nodes. The nodes are sorted in such a way, where they have to follow some rules with their parent node, but not necessarily with the left / right nodes.<br>For example, the "MaxHeap" is a type of heap where each node, has a bigger parent node.
 
 #### Properties
+
 
 #### Notes
 
