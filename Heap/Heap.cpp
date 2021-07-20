@@ -3,21 +3,7 @@
 #include <cmath>
 #include <initializer_list>
 
-// todo
-// 1. passing array is not possible. consider passing ptr and size?
-// 2. initialzier list
-// 3. move and copy const
-// 4. move and copy assignment
-// 5. pass ptr to sort algo
-// 6. remove top / bottom (instead of min max)
 
-// todo docs
-// 1. pass ptr address, make sure types are correct
-// 2. min max as example for top child?
-// 3. nodes idx return is -1 if doesnt exist
-// 4. order of traversal
-
-template <typename T>
 class Heap
 {
 	private:
@@ -25,14 +11,12 @@ class Heap
 		static const unsigned int _DEF_SIZE{ 10 };
 		static const unsigned int _DEF_EXT_VAL { 2 };
 		unsigned int _capacity;		
+		bool (*_sorting_algo)(T node_val, T parent_val); // pass ptr to overwrite this 
 
 		T* _begin() const { return &this->_elem_arr[0]; };
 		T* _end() const { return &this->_elem_arr[this->size]; };
 		
 		void _reallocate(); // when not enough space...
-		
-		bool (*_sorting_algo)(T node_val, T parent_val); // pass ptr to overwrite this 
-	
 		void _swap(const unsigned int idx_1, const unsigned idx_2);
 	
 	public:
@@ -54,7 +38,7 @@ class Heap
 		bool has_right_child(const unsigned int idx) const;
 		bool has_left_child(const unsigned int idx) const;
 	
-		void insert(const T val); // TODO return node #??
+		void insert(const T val); 
 		T& get(const unsigned int idx); // get val in certain index
 		unsigned int heapify(unsigned int idx); // returns new index 
 		void sort_heap();
