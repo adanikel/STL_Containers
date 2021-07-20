@@ -23,8 +23,8 @@ public:
 	Queue(Queue& src_queue); // copy constructor not const - to access iterator methods
 	Queue(Queue&& r_queue) noexcept;
 
-	Queue<T>& operator= (Queue<T>& queue_obj);
-	Queue<T>& operator= (Queue<T>&& r_queue) noexcept;
+	Queue<T>& operator=(Queue<T>& queue_obj);
+	Queue<T>& operator=(Queue<T>&& r_queue) noexcept;
 	
 	virtual void enqueue(const T& val);
 	virtual void enqueue(T&& r_val);
