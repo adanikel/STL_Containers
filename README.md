@@ -54,6 +54,12 @@ An implementation of an Unorderd Map data structure. Elements are accesses by ke
 #### Notes
 1. The buckets (lists) store `std::pair`-type links, where the `pair->first` is the original key, and `pair->second` is the stored value. This is needed in order to find the right value for buckets that have several values.
 
+## Heap
+
+#### Properties
+
+#### Notes
+
 ## Stack
 An implementation of a Stack data structure container. A container that has an underlying array, and allows insertion / deletion of the top element in the array only.
 
