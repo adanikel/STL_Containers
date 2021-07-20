@@ -21,10 +21,10 @@ class Heap
 		
 		void _reallocate(); // when not enough space...
 		
-		bool _sorting_algo(T node_val, T parent_val); // pass ptr to overwrite this 
+		bool (*_sorting_algo)(T node_val, T parent_val); // pass ptr to overwrite this 
 		
 	public:
-		Heap(bool (*sort_mtd_ptr)(T node_val, T parent_val));
+		Heap(bool(*sort_mtd_ptr)(T, T));
 		
 		unsigned int insert(T val);
 		
@@ -38,17 +38,17 @@ bool is_bigger(int val_1, int val_2)
 
 int main()
 {
-	Heap<int> x{is_bigger};
+	Heap<int> x{&is_bigger};
 
 	return 0;
 }
 
 template <typename T>
-Heap<T>::Heap(bool (*sort_mtd_ptr)(T node_val, T parent_val))
+Heap<T>::Heap(bool(*sort_mtd_ptr)(T, T))
 	: _elem_arr{ new T[_DEF_SIZE] }, _size{ _DEF_SIZE } 
 {
-	&this->_sorting_algo = sort_mtd_ptr;
-	std::cout << this->_sorting_algo(2, 3) << std::endl; // TODO remove
+	this->_sorting_algo = sort_mtd_ptr;
+	std::cout << this->_sorting_algo(2, 3) << std::endl << this->_sorting_algo(3, 2) << std::endl; // TODO remove
 }
 
 template <typename T>
