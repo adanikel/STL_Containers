@@ -45,8 +45,6 @@ class Heap
 		bool has_right_child(const unsigned int idx) const;
 		bool has_left_child(const unsigned int idx) const;
 	
-		Heap(bool(*sort_mtd_ptr)(T, T));
-		
 		void insert(const T val); // TODO return node #??
 		
 		~Heap();
@@ -69,7 +67,7 @@ Heap<T>::Heap(bool(*sort_mtd_ptr)(T, T))
 	: _elem_arr{ new T[_DEF_SIZE] }, _capacity{ _DEF_SIZE }, _size{ _DEF_SIZE }, _sorting_algo{ sort_mtd_ptr }
 {
 	std::cout << this->_sorting_algo(2, 3) << std::endl << this->_sorting_algo(3, 2) << std::endl; // TODO remove
-	std::cout << this->_get_parent_position(3) << std::endl; // should be 1
+	std::cout << this->get_parent_position(3) << std::endl; // should be 1
 }
 
 template <typename T>
@@ -108,21 +106,21 @@ int Heap<T>::get_left_child_position(const unsigned int idx) const
 }
 
 template <typename T>
-bool Heap<T>::_has_parent(const unsigned int idx) const
+bool Heap<T>::has_parent(const unsigned int idx) const
 {
 	return idx != 0;
 }
 
 template <typename T>
-bool Heap<T>::_has_right_child(const unsigned int idx) const
+bool Heap<T>::has_right_child(const unsigned int idx) const
 {
-	this->_get_right_child_position(idx) < this->_size;
+	this->get_right_child_position(idx) < this->_size;
 }
 
 template <typename T>
-bool Heap<T>::_has_left_child(const unsigned int idx) const
+bool Heap<T>::has_left_child(const unsigned int idx) const
 {
-	return this->_get_left_child_position(idx) < this->_size;
+	return this->get_left_child_position(idx) < this->_size;
 }
 
 template <typename T>
