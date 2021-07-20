@@ -14,6 +14,7 @@
 // 1. pass ptr address, make sure types are correct
 // 2. min max as example for top child?
 // 3. nodes idx return is -1 if doesnt exist
+// 4. order of traversal
 
 template <typename T>
 class Heap
@@ -23,18 +24,19 @@ class Heap
 		static const unsigned int _DEF_SIZE{ 10 };
 		static const unsigned int _DEF_EXT_VAL { 2 };
 		unsigned int _capacity;		
-		unsigned int _size;
 
 		T* _begin() const { return &this->_elem_arr[0]; };
-		T* _end() const { return &this->_elem_arr[this->_size]; };
+		T* _end() const { return &this->_elem_arr[this->size]; };
 		
 		void _reallocate(); // when not enough space...
 		
 		bool (*_sorting_algo)(T node_val, T parent_val); // pass ptr to overwrite this 
-		
+	
 		void _swap(const unsigned int idx_1, const unsigned idx_2);
 	
 	public:
+		unsigned int size;
+
 		Heap(bool(*sort_mtd_ptr)(T, T));
 
 		int get_parent_position(const unsigned int idx) const; // return array idx
@@ -46,7 +48,10 @@ class Heap
 		bool has_left_child(const unsigned int idx) const;
 	
 		void insert(const T val); // TODO return node #??
-		
+		T& get(const unsigned int idx); // get val in certain index
+		unsigned int heapify(unsigned int idx); // returns new index 
+		void sort_heap();
+			
 		~Heap();
 };
 
@@ -58,24 +63,41 @@ bool is_bigger(int val_1, int val_2)
 int main()
 {
 	Heap<int> x{&is_bigger};
+	x.insert(1);
+        x.insert(4);
+        x.insert(3);
+        x.insert(7);
+        x.insert(8);
+        x.insert(9);
+	x.insert(0);
+	x.insert(11);
+	x.insert(939);
+	x.insert(44);
+	x.insert(8547);
+	x.insert(15);
+        x.insert(10);
+	x.sort_heap();
 
+	unsigned int idx{ 0 };
+	while(idx < x.size)
+	{
+		std::cout << "elem of " << idx << " is " << x.get(idx) << std::endl;	
+		++idx;
+	}
 	return 0;
 }
 
 template <typename T>
 Heap<T>::Heap(bool(*sort_mtd_ptr)(T, T))
-	: _elem_arr{ new T[_DEF_SIZE] }, _capacity{ _DEF_SIZE }, _size{ _DEF_SIZE }, _sorting_algo{ sort_mtd_ptr }
-{
-	std::cout << this->_sorting_algo(2, 3) << std::endl << this->_sorting_algo(3, 2) << std::endl; // TODO remove
-	std::cout << this->get_parent_position(3) << std::endl; // should be 1
-}
+	: _elem_arr{ new T[_DEF_SIZE] }, _capacity{ _DEF_SIZE }, size{ 0 }, _sorting_algo{ sort_mtd_ptr }
+{}
 
 template <typename T>
 void Heap<T>::_reallocate()
 {
 	this->_capacity *= this->_DEF_EXT_VAL;
 	T* new_arr = new T[this->_capacity];
-	std::move(this->_begin(), this->_end() - 1, new_arr);
+	std::move(this->_begin(), this->_end(), new_arr);
 	
 	delete[] this->_elem_arr;
 	this->_elem_arr = new_arr; 
@@ -114,19 +136,49 @@ bool Heap<T>::has_parent(const unsigned int idx) const
 template <typename T>
 bool Heap<T>::has_right_child(const unsigned int idx) const
 {
-	this->get_right_child_position(idx) < this->_size;
+	this->get_right_child_position(idx) < this->size;
 }
 
 template <typename T>
 bool Heap<T>::has_left_child(const unsigned int idx) const
 {
-	return this->get_left_child_position(idx) < this->_size;
+	return this->get_left_child_position(idx) < this->size;
 }
 
 template <typename T>
 void Heap<T>::insert(const T val)
+{	
+	if (this->size == this->_capacity) this->_reallocate();
+	this->_elem_arr[this->size] = val;
+	++this->size;
+}
+
+template <typename T>
+T& Heap<T>::get(const unsigned int idx)
 {
-	this->_elem_arr[this->_size] = val;
+	return this->_elem_arr[idx];
+}
+
+template <typename T>
+unsigned int Heap<T>::heapify(unsigned int idx)
+{
+	while (this->has_parent(idx) && this->_sorting_algo(this->_elem_arr[idx], this->_elem_arr[this->get_parent_position(idx)]))
+	{	
+		this->_swap(idx, this->get_parent_position(idx));
+		idx = this->get_parent_position(idx);
+	}
+	return idx;
+}
+
+template <typename T>
+void Heap<T>::sort_heap()
+{
+	unsigned int idx{ 0 };
+	while(idx < this->size)
+	{
+		this->heapify(idx);
+		++idx;
+	}
 }
 
 template <typename T>
