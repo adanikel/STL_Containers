@@ -8,6 +8,10 @@
 // 5. pass ptr to sort algo
 // 6. remove top / bottom (instead of min max)
 
+// todo docs
+// 1. pass ptr address, make sure types are correct
+// 2. min max as example for top child?
+
 template <typename T>
 class Heap
 {
