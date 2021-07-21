@@ -1,4 +1,4 @@
-# STL_Containers
+# STL-Containers
 
 Implementations for some standard library containers and some other data structures. Every implementation contains a `main()` functions that performs some basic tests. <br> The `Queue` data has all its tests inside the `CircularQueue` class, because it derives from `Queue` and therefore all tests can be performed in one place. <br> All implementations have `copy / move` constructors and assignment operators defined.
 
