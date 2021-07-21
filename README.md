@@ -62,7 +62,7 @@ An implementation of the Heap data structure. The elements of the container are 
 * Insertion is basically O(1) because the value is inserted as the last underlying array element, but the process of heapifying (even after insertion) is O(nlog n)
 
 #### Notes
-1. Level-order-traversal is used to iteratore over the nodes in this implementation
+1. Level-order-traversal is used to iterate over the nodes in this implementation
 2. In order to define the sorting algorithm, you need to pass a function pointer into the constructor that accepts (node index, parent_node index) as params and returns a bool value.<br>You can see the usage of `is_bigger()` as an example in the `main()` method.
 3. The `has_*` methods, which are used to find out whether a node has parent/child nodes, return `-1` if no such nodes exist.
 
